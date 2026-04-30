@@ -2725,14 +2725,10 @@ function evalSlots(res, tok) {
 // =====================================================
 // HI-LO (Magasabb-Alacsonyabb) — új kártyajáték
 // Becsületes valószínűségi alapokon. Aces=1, K=13.
-// Tipp magasabbra: győz ha next > current; nyeremény = bet * (52-currentRank)/(13-currentRank) * 0.95 (5% house edge)
-// Egyszerűbb: szorzó = (52 - countOfHigherCards) / (countOfHigherCards) ... de tartsuk fairnek és érthetőnek.
-// HASZNÁLJUK: szorzó = round(0.95 * 13 / countHigher) for "magasabb"
-//             szorzó = round(0.95 * 13 / countLower) for "alacsonyabb"
-// Streak: minden helyes tipp esetén az aktuális szorzó beleszorzódik a halmozott szorzóba.
-// Cashout: streakMult * bet kifizetés.
+// NINCS EGYENLŐSÉG: Ha azonos érték jönne, a gép újat húz.
 // =====================================================
 let hiloDeck = [], hiloCurrent = null, hiloBet = 100, hiloMult = 1, hiloStreak = 0, hiloPhase = 'idle';
+
 function makeDeck() {
   const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
   const suits = ['♠','♥','♦','♣'];
@@ -2741,9 +2737,13 @@ function makeDeck() {
   for (let i=d.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [d[i],d[j]]=[d[j],d[i]]; }
   return d;
 }
+
 function rankIsRed(suit) { return suit==='♥' || suit==='♦'; }
+
 function hiloAdj(d) { if (hiloPhase!=='idle') return; playClick(); hiloBet=Math.max(100,Math.min(50000,getBet('hilo-bet')+d)); setBetDisplay('hilo-bet',hiloBet); }
+
 function hiloBetInput(el) { if (hiloPhase!=='idle') return; hiloBet = Math.max(100, parseInt((el.value||'').replace(/\D/g,''))||100); }
+
 function hiloReset() {
   hiloPhase = 'idle'; hiloMult = 1; hiloStreak = 0; hiloCurrent = null;
   document.getElementById('hilo-card-current').className='hilo-card hidden';
@@ -2760,6 +2760,7 @@ function hiloReset() {
   document.getElementById('hilo-start-btn').disabled = false;
   unlockBets('hl-bet');
 }
+
 function hiloStart() {
   if (hiloPhase !== 'idle') return;
   const u = curUser(); if (!u) return;
@@ -2779,6 +2780,7 @@ function hiloStart() {
   document.getElementById('hilo-info').textContent = 'A jelenlegi lap értéke: ' + hiloCurrent.rank + ' (' + hiloCurrent.val + '). Magasabb vagy alacsonyabb?';
   document.getElementById('hilo-streak').style.display = 'inline-block';
 }
+
 function showHiloCurrent() {
   const el = document.getElementById('hilo-card-current');
   el.className = 'hilo-card ' + (rankIsRed(hiloCurrent.suit) ? 'red' : 'black');
@@ -2786,27 +2788,30 @@ function showHiloCurrent() {
   document.getElementById('hilo-card-next').className='hilo-card hidden';
   document.getElementById('hilo-card-next').textContent='?';
 }
+
 function hiloProbAndMult() {
-  // 51 kártya van még a pakliban (egy le van fordítva)
   const v = hiloCurrent.val;
-  // A pakliban 4-4 lap van minden értékhez, kivonva a már lefordított currentet (1 db v értékű)
-  // Egyszerű: az értékek 1..13, mind 4-szer, kivéve hiloCurrent.val=v ami 3-szor.
-  let higher = 0, lower = 0, equal = 0;
-  for (let r=1;r<=13;r++) {
+  let higher = 0, lower = 0;
+  
+  // Csak a magasabb és alacsonyabb lapokat számoljuk, az egyenlőket kihagyjuk a pakliból
+  for (let r=1; r<=13; r++) {
     let cnt = 4;
-    if (r === v) cnt = 3;
+    if (r === v) cnt = 0; // Mivel átugorjuk húzáskor, az esélye 0
     if (r > v) higher += cnt;
     else if (r < v) lower += cnt;
-    else equal += cnt;
   }
-  const total = higher + lower + equal; // = 51
+  
+  const total = higher + lower; 
   const pUp = higher / total;
   const pDown = lower / total;
   const HOUSE = 0.95; // 5% ház előny
+
   const multUp = pUp > 0 ? Math.max(1.01, Math.round((HOUSE / pUp) * 100) / 100) : 0;
   const multDown = pDown > 0 ? Math.max(1.01, Math.round((HOUSE / pDown) * 100) / 100) : 0;
-  return { higher, lower, equal, total, pUp, pDown, multUp, multDown };
+
+  return { higher, lower, total, pUp, pDown, multUp, multDown };
 }
+
 function updateHiloUI() {
   if (hiloPhase !== 'guess') return;
   const p = hiloProbAndMult();
@@ -2816,44 +2821,46 @@ function updateHiloUI() {
   document.getElementById('hilo-btn-up').textContent = '⬆ Magasabb (' + p.multUp.toFixed(2) + 'x)';
   document.getElementById('hilo-btn-down').textContent = '⬇ Alacsonyabb (' + p.multDown.toFixed(2) + 'x)';
   document.getElementById('hilo-prob').textContent =
-    `Esélyek: magasabb ${(p.pUp*100).toFixed(1)}% | alacsonyabb ${(p.pDown*100).toFixed(1)}% | egyenlő ${(p.equal/p.total*100).toFixed(1)}%`;
+    `Esélyek: magasabb ${(p.pUp*100).toFixed(1)}% | alacsonyabb ${(p.pDown*100).toFixed(1)}%`;
   document.getElementById('hilo-streak').textContent = `🔥 Sorozat: ${hiloStreak} | Halmozott szorzó: ${hiloMult.toFixed(2)}x | Lehetséges: ${Math.round(hiloBet*hiloMult).toLocaleString('hu-HU')} Ft`;
 }
+
 function hiloGuess(dir) {
   if (hiloPhase !== 'guess' || !hiloCurrent) return;
-  if (hiloDeck.length === 0) { hiloCashout(); return; }
+  
+  let next;
+  // Addig húzunk, amíg nem találunk az aktuálistól eltérő értékű lapot
+  do {
+    if (hiloDeck.length === 0) {
+      hiloCashout();
+      return;
+    }
+    next = hiloDeck.pop();
+  } while (next.val === hiloCurrent.val);
+
   const p = hiloProbAndMult();
-  const next = hiloDeck.pop();
-  // Mutatjuk
   const nextEl = document.getElementById('hilo-card-next');
   nextEl.className = 'hilo-card ' + (rankIsRed(next.suit) ? 'red' : 'black');
   nextEl.innerHTML = `<div>${next.rank}</div><div>${next.suit}</div>`;
 
   const isHigher = next.val > hiloCurrent.val;
   const isLower = next.val < hiloCurrent.val;
-  const isEqual = next.val === hiloCurrent.val;
 
   let win = false;
   let chosenMult = 1;
-  if (isEqual) {
-    // Tie = a guess elveszik (ház előnye)
-    document.getElementById('hilo-info').textContent = 'Egyenlő érték! A ház nyer.';
-    playLose();
-    finishHilo(false);
-    return;
-  }
+
   if (dir === 'up') {
     win = isHigher; chosenMult = p.multUp;
   } else {
     win = isLower; chosenMult = p.multDown;
   }
+
   if (win) {
     hiloMult *= chosenMult;
     hiloStreak++;
     playWin();
     document.getElementById('hilo-info').textContent = '✓ Jó tipp! Folytasd vagy vedd ki.';
     setTimeout(() => {
-      // következő kör: a next lesz az új current
       hiloCurrent = next;
       showHiloCurrent();
       updateHiloUI();
@@ -2864,10 +2871,12 @@ function hiloGuess(dir) {
     finishHilo(false);
   }
 }
+
 function hiloCashout() {
   if (hiloPhase !== 'guess' || hiloStreak === 0) return;
   finishHilo(true);
 }
+
 function finishHilo(cashedOut) {
   hiloPhase = 'done';
   document.getElementById('hilo-btn-up').disabled = true;
