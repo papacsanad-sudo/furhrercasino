@@ -140,6 +140,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .modal input:focus{border-color:var(--gold)}
 .modal-close{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:9px 22px;border-radius:var(--radius);cursor:pointer;margin-top:14px;font-size:.88rem;font-weight:600;transition:.2s}
 .modal-close:hover{color:var(--text)}
+.modal-x{position:absolute;top:10px;right:10px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;font-weight:600;transition:.2s;display:flex;align-items:center;justify-content:center}
+.modal-x:hover{color:var(--text);background:var(--bg)}
 
 /* CONFETTI */
 .confetti-piece{position:fixed;pointer-events:none;z-index:9999;animation:confettiFall linear forwards}
@@ -952,7 +954,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
     <div class="modal-title">Plinko Játék Feloldása</div>
     <p style="color:var(--text2);font-size:.9rem;margin:14px 0">A Plinko játék eléréséhez meg kell vásárolnod!</p>
     <div style="background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);border-radius:10px;padding:14px;margin:14px 0;text-align:center">
-      <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">1.500.000 Ft</div>
+      <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">450.000 Ft</div>
       <div style="font-size:.85rem;color:var(--text2);margin-top:6px">Egyszeri költség — játszás után már korlátlan!</div>
     </div>
     <div class="confirm-row">
@@ -980,6 +982,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
     </div>
     <div class="bp-track" id="bp-track"></div>
     <div class="bp-progress-info">A jelenlegi szintedet 🟡 jelölés mutatja. Görgess jobbra a következő jutalmakhoz!</div>
+    <button id="bp-claim-all-btn" onclick="claimAllBattlePassRewards()" style="width:auto;padding:8px 14px;font-size:.9rem;min-width:170px;margin:10px auto 6px;display:block;border-radius:10px;background:linear-gradient(135deg,#e6a800,#f5c518);color:#0d1117;border:none;cursor:pointer">Összes begyűjtése</button>
     <button class="modal-close" onclick="closeBattlePass()">Bezárás</button>
   </div>
 </div>
@@ -1371,6 +1374,9 @@ function claimReward(L) {
     u.balance = Math.min(MAX_BALANCE, u.balance + rew.amount);
   } else if (rew.type === 'skin') {
     if (!u.ownedBalls.includes(rew.skinId)) u.ownedBalls.push(rew.skinId);
+  } else if (rew.type === 'avatar') {
+    if (!u.ownedAvatars) u.ownedAvatars = ['avatar_basic1'];
+    if (!u.ownedAvatars.includes(rew.avatar)) u.ownedAvatars.push(rew.avatar);
   }
   u.claimedRewards.push(L);
   // BP frame grant — minden 5. szint L15-től véletlenszerű új keret
@@ -1382,6 +1388,47 @@ function claimReward(L) {
   spawnConfetti(rew.type === 'skin' ? 50 : 20);
   renderBattlePass();
   updateNav();
+}
+
+function claimAllBattlePassRewards() {
+  const u = curUser();
+  if (!u) return;
+  const lvl = currentLevel();
+  let totalMoney = 0;
+  let claimed = 0;
+
+  for (let L = 1; L <= lvl; L++) {
+    if (u.claimedRewards.includes(L)) continue;
+    const rew = rewardForLevel(L);
+    if (!rew) continue;
+    if (rew.type === 'money') {
+      u.balance = Math.min(MAX_BALANCE, u.balance + rew.amount);
+      u.claimedRewards.push(L);
+      totalMoney += rew.amount;
+      claimed += 1;
+    } else if (rew.type === 'avatar') {
+      if (!u.ownedAvatars) u.ownedAvatars = ['avatar_basic1'];
+      if (!u.ownedAvatars.includes(rew.avatar)) u.ownedAvatars.push(rew.avatar);
+      u.claimedRewards.push(L);
+      claimed += 1;
+    } else if (rew.type === 'skin') {
+      if (!u.ownedBalls.includes(rew.skinId)) u.ownedBalls.push(rew.skinId);
+      u.claimedRewards.push(L);
+      claimed += 1;
+    } else if (rew.type === 'nothing') {
+      u.claimedRewards.push(L);
+    }
+  }
+
+  if (claimed > 0) {
+    persist();
+    renderBattlePass();
+    updateNav();
+    const msg = 'A Battle Passból összesen ' + totalMoney.toLocaleString('hu-HU') + ' Ft pénzt gyűjtöttél be.';
+    alert(msg);
+  } else {
+    alert('Nincs új pénzjutalom, amit begyűjthetnél a jelenlegi szinten.');
+  }
 }
 
 // =====================================================
@@ -1721,7 +1768,7 @@ function renderLocalFallback(list, reason) {
     lvl: levelFromXp(u.xp || 0),
     bal: u.balance || 0
   }));
-  all.sort((a, b) => b.lvl - a.lvl || b.bal - a.bal);
+  all.sort((a, b) => b.bal - a.bal);
   list.innerHTML = '';
   const note = document.createElement('div');
   note.style.cssText = 'text-align:center;color:#f0a;padding:8px;font-size:13px';
@@ -1764,7 +1811,7 @@ async function renderLeaderboard() {
       return;
     }
     const me = curUser() ? curUser().username : null;
-    rows.sort((a, b) => (b.level - a.level) || (Number(b.balance) - Number(a.balance)));
+    rows.sort((a, b) => Number(b.balance) - Number(a.balance));
     rows.forEach((p, i) => {
       const rank = i + 1;
       let rankClass = '';
@@ -1819,7 +1866,7 @@ function redeemCode() {
 function buyPlinkoGame() {
   const u = curUser();
   if (!u) return;
-  const COST = 1500000; // 1,5 millió Ft
+  const COST = 450000; // 450 ezer Ft
   if (u.balance < COST) {
     alert('Nincs elég egyenleged! Szükséges: ' + COST.toLocaleString('hu-HU') + ' Ft');
     return;
@@ -4036,7 +4083,7 @@ function applyBtnPositions() {
   }
 }
 function getAllAvatars() {
-  return [...AVATAR_SHOP.basic, ...AVATAR_SHOP.premium];
+  return [...AVATAR_SHOP.basic, ...AVATAR_SHOP.premium, ...AVATARS.map(emoji => ({ id: emoji, emoji, name: 'BP Avatár', cost: 0, level: 0 }))];
 }
 
 function openAvatarShop() {
@@ -4055,7 +4102,7 @@ function renderAvatarShop() {
   if (!u) return;
   const lv = currentLevel();
 
-  function renderGroup(containerId, list) {
+  function renderGroup(containerId, list, isBP = false) {
     const c = document.getElementById(containerId);
     c.innerHTML = '';
     list.forEach(avatar => {
@@ -4066,26 +4113,38 @@ function renderAvatarShop() {
       let cls = 'ball-card';
       if (owned) cls += ' owned';
       if (equipped) cls += ' selected';
-      if (!unlocked) cls += ' locked';
+      if (!unlocked && !isBP) cls += ' locked';
 
       let btn = '';
-      if (!owned && !unlocked) {
-        btn = `<button class="ball-action-btn locked" disabled>🔒 L${avatar.level} szükséges</button>`;
-      } else if (!owned && u.balance >= avatar.cost) {
-        btn = `<button class="ball-action-btn buy" onclick="buyAvatar('${avatar.id}')">🛒 ${avatar.cost.toLocaleString('hu-HU')} Ft</button>`;
-      } else if (!owned) {
-        btn = '<button class="ball-action-btn locked" disabled>💸 Nincs elég Ft</button>';
-      } else if (equipped) {
-        btn = '<button class="ball-action-btn equipped" disabled>✓ Aktív</button>';
+      if (isBP) {
+        if (owned) {
+          if (equipped) {
+            btn = '<button class="ball-action-btn equipped" disabled>✓ Aktív</button>';
+          } else {
+            btn = `<button class="ball-action-btn select" onclick="selectAvatar('${avatar.id}')">Kiválaszt</button>`;
+          }
+        } else {
+          btn = '<button class="ball-action-btn locked" disabled>🎟️ Battle Passból szerezhető</button>';
+        }
       } else {
-        btn = `<button class="ball-action-btn select" onclick="selectAvatar('${avatar.id}')">Kiválaszt</button>`;
+        if (!owned && !unlocked) {
+          btn = `<button class="ball-action-btn locked" disabled>🔒 L${avatar.level} szükséges</button>`;
+        } else if (!owned && u.balance >= avatar.cost) {
+          btn = `<button class="ball-action-btn buy" onclick="buyAvatar('${avatar.id}')">🛒 ${avatar.cost.toLocaleString('hu-HU')} Ft</button>`;
+        } else if (!owned) {
+          btn = '<button class="ball-action-btn locked" disabled>💸 Nincs elég Ft</button>';
+        } else if (equipped) {
+          btn = '<button class="ball-action-btn equipped" disabled>✓ Aktív</button>';
+        } else {
+          btn = `<button class="ball-action-btn select" onclick="selectAvatar('${avatar.id}')">Kiválaszt</button>`;
+        }
       }
 
       card.className = cls;
       card.innerHTML = `
         <div style="font-size:3rem;margin:10px 0">${avatar.emoji}</div>
         <div class="ball-name">${avatar.name}</div>
-        <div class="ball-source">L${avatar.level}+</div>
+        <div class="ball-source">${isBP ? 'Battle Pass' : 'L' + avatar.level + '+'}</div>
         ${btn}
       `;
       c.appendChild(card);
@@ -4093,6 +4152,7 @@ function renderAvatarShop() {
   }
 
   renderGroup('avatar-basic-grid', AVATAR_SHOP.basic);
+  renderGroup('avatar-bp-grid', AVATARS.map(emoji => ({ id: emoji, emoji, name: 'BP Avatár', cost: 0, level: 0 })), true);
   renderGroup('avatar-premium-grid', AVATAR_SHOP.premium);
 }
 
@@ -4169,16 +4229,62 @@ if (!localStorage.getItem("resetDone")) {
   location.reload();
 }
 
+// ESC gomb minden játékból való kilépéshez
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    // Plinko
+    if (document.getElementById('plinko-game').style.display !== 'none') {
+      closePlinkoGame();
+      return;
+    }
+    // Poker
+    if (document.getElementById('poker-match').style.display !== 'none') {
+      closePoker();
+      return;
+    }
+    // Roulette
+    if (document.getElementById('roulette-game').style.display !== 'none') {
+      closeRoulette();
+      return;
+    }
+    // Keno
+    if (document.getElementById('keno-game').style.display !== 'none') {
+      closeKeno();
+      return;
+    }
+    // Slots
+    if (document.getElementById('slots-game').style.display !== 'none') {
+      closeSlots();
+      return;
+    }
+    // Modal-ok bezárása, ha nyitva vannak
+    const modals = ['bp-modal', 'lb-modal', 'ball-modal', 'avatar-shop-modal', 'balance-modal', 'plinko-buy-modal', 'name-change-modal', 'confirm-modal', 'bg-editor-modal'];
+    for (const id of modals) {
+      const modal = document.getElementById(id);
+      if (modal && !modal.classList.contains('hidden')) {
+        modal.classList.add('hidden');
+        return;
+      }
+    }
+  }
+});
+
 </script>
 
 <!-- AVATAR SHOP MODAL -->
 <div class="modal-overlay hidden" id="avatar-shop-modal">
   <div class="modal lg">
+    <button class="modal-x" onclick="closeAvatarShop()">✕</button>
     <div style="font-size:2.5rem;margin-bottom:6px">👤</div>
     <div class="modal-title">Avatár Shop</div>
     
     <div class="balls-section-title" style="margin-top:14px">🟢 Alapszintű (1.000.000 Ft)</div>
     <div class="balls-grid" id="avatar-basic-grid"></div>
+
+    <div class="balls-shop-section">
+      <div class="balls-section-title">🎟️ Battle Pass Avatárok</div>
+      <div class="balls-grid" id="avatar-bp-grid"></div>
+    </div>
 
     <div class="balls-shop-section">
       <div class="balls-section-title">💎 Prémium</div>
