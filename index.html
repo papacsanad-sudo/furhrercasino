@@ -33,6 +33,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   font-weight: 900;
   background: linear-gradient(135deg, #f5c518, #e6a800, #ffd700);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
   margin-right: 6px;
@@ -47,6 +48,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   -webkit-text-fill-color: initial;
   background: none;
   -webkit-background-clip: initial;
+  background-clip: initial;
 }
 #balance-btn{background:var(--bg3);border:1px solid rgba(245,197,24,.35);color:var(--text);padding:7px 14px;border-radius:var(--radius);cursor:pointer;font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:6px;transition:.2s}
 #balance-btn:hover{border-color:var(--gold);box-shadow:0 0 10px rgba(245,197,24,.15)}
@@ -70,7 +72,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:36px;width:100%;max-width:420px;text-align:center}
 .login-logo{font-size:4rem;margin-bottom:10px;display:block;animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.login-title{font-size:2rem;font-weight:900;background:linear-gradient(135deg,#f5c518,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.login-title{font-size:2rem;font-weight:900;background:linear-gradient(135deg,#f5c518,#ffd700);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
 .login-sub{color:var(--text2);font-size:.88rem;margin-bottom:24px}
 .form-group{text-align:left;margin-bottom:14px}
 .form-group label{display:block;font-size:.82rem;color:var(--text2);margin-bottom:6px}
@@ -343,7 +345,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .bp-modal{max-width:760px}
 .bp-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .bp-stats{text-align:left}
-.bp-current-level{font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,#8b5cf6,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.bp-current-level{font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,#8b5cf6,#6366f1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .bp-xp-bar{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:20px;height:14px;overflow:hidden;margin-top:8px}
 .bp-xp-fill{background:linear-gradient(90deg,#8b5cf6,#6366f1,#3b82f6);height:100%;transition:width .5s ease;border-radius:20px;box-shadow:0 0 12px rgba(139,92,246,.5)}
 .bp-xp-text{font-size:.8rem;color:var(--text2);margin-top:4px}
@@ -1022,7 +1024,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 <div class="modal-overlay hidden" id="welcome-popup">
   <div class="modal" style="max-width:360px" onclick="closeWelcome()">
     <span class="welcome-icon">🎰</span>
-    <div class="modal-title" style="background:linear-gradient(135deg,#f5c518,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Üdvözöllek!</div>
+    <div class="modal-title" style="background:linear-gradient(135deg,#f5c518,#ffd700);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Üdvözöllek!</div>
     <p style="color:var(--text2);margin:10px 0">Szia, <span id="welcome-name" style="color:var(--gold);font-weight:700"></span>!<br/>Sok szerencsét! 🍀</p>
     <div style="font-size:1.8rem;margin:10px 0">🃏 🎲 🪙 🎯 🎰 🎴</div>
     <p style="font-size:.78rem;color:var(--text2)">Kattints a folytatáshoz</p>
@@ -1105,7 +1107,7 @@ function isAborted(t) { return t !== gameToken; }
 // "ADATBÁZIS" — localStorage + Cloud
 // =====================================================
 const DB_KEY = 'fortunecasino_db_v3';
-const MAX_BALANCE = 5_000_000_000;
+const MAX_BALANCE = 10_000_000_000;
 
 function loadDB() {
   try {
@@ -1347,9 +1349,12 @@ function flashXp(text) {
 
 // XP-t adunk a játékesemény alapján
 function gameOpenedXp() { awardXp(1, 'játék'); }
-function gameWonXp(big) {
+function gameWonXp(big, amount = 0) {
   awardXp(5, big ? 'nyertél!' : 'nyertél');
   if (big) awardXp(10, 'NAGY NYEREMÉNY 1M+'); // bónusz 1M Ft+ nyereményre
+  if (amount > 0) {
+    try { dailyTrack('win_amount', amount); } catch(e){}
+  }
   try { dailyTrack('win_round', 1); } catch(e){}
   try { triggerWinEffects(big); } catch(e){}
 }
@@ -2242,6 +2247,7 @@ function plinkoPlay() {
   if (plinkoBet > getBalance()) { document.getElementById('plinko-no-bal').style.display='block'; return; }
   document.getElementById('plinko-no-bal').style.display = 'none';
   document.getElementById('plinko-result').innerHTML = '';
+  try { dailyTrack('play_plinko', 1); } catch (e) {}
   plinkoRunning = true;
   document.getElementById('plinko-play-btn').disabled = true;
   lockBets('pl-bet');
@@ -2291,7 +2297,7 @@ function animatePlinkoBall(finalSlot, tok) {
     plinkoRunning = false;
     document.getElementById('plinko-play-btn').disabled = false;
     unlockBets('pl-bet');
-    if (win > 0) gameWonXp(checkWin(win)); else awardXp(1, 'plinko');
+    if (win > 0) gameWonXp(checkWin(win), win); else awardXp(1, 'plinko');
     showPlinkoResult(mult, win);
     renderPlinkoFrame(ballX, ballY, finalSlot);
     return;
@@ -2426,6 +2432,7 @@ function cfPlay() {
   lockBets('cf-bet'); lockBets('cf-mode-btn'); lockBets('cf-choice'); lockBets('cf-num');
   cfRunning = true;
   setBalance(getBalance() - cfBet);
+  try { const evt = (cfMode === 'dice') ? 'play_dice' : 'play_coin'; dailyTrack(evt, 1); } catch (e) {}
   gameOpenedXp();
   const tok = getTok();
   if (cfMode === 'coin') {
@@ -2444,7 +2451,7 @@ function cfPlay() {
       document.getElementById('cf-result').innerHTML = win
         ?`<div class="result-win"><div class="result-title">🎉 Nyertél!</div><div class="result-amount">${outcome==='heads'?'Fej':'Írás'} — +${amount.toLocaleString('hu-HU')} Ft</div></div>`
         :`<div class="result-lose"><div class="result-title">😔 Vesztettél</div><div class="result-amount">Eredmény: ${outcome==='heads'?'Fej':'Írás'}</div></div>`;
-      if (win) { playWin(); spawnConfetti(25); gameWonXp(checkWin(amount)); } else playLose();
+      if (win) { playWin(); spawnConfetti(25); gameWonXp(checkWin(amount), amount); dailyTrack('win_coin_amount', amount); } else playLose();
       cfRunning=false; document.getElementById('cf-play-btn').disabled=false;
       unlockBets('cf-bet'); unlockBets('cf-mode-btn'); unlockBets('cf-choice'); unlockBets('cf-num');
     }, 1800);
@@ -2464,7 +2471,7 @@ function cfPlay() {
       document.getElementById('cf-result').innerHTML = win
         ?`<div class="result-win"><div class="result-title">🎉 Nyertél! (6x)</div><div class="result-amount">Szám: ${outcome} — +${amount.toLocaleString('hu-HU')} Ft</div></div>`
         :`<div class="result-lose"><div class="result-title">😔 Vesztettél</div><div class="result-amount">Eredmény: ${outcome}</div></div>`;
-      if (win) { playWin(); spawnConfetti(25); gameWonXp(checkWin(amount)); } else playLose();
+      if (win) { playWin(); spawnConfetti(25); gameWonXp(checkWin(amount), amount); } else playLose();
       cfRunning=false; document.getElementById('cf-play-btn').disabled=false;
       unlockBets('cf-bet'); unlockBets('cf-mode-btn'); unlockBets('cf-choice'); unlockBets('cf-num');
     }, 1800);
@@ -2515,6 +2522,7 @@ function bjDeal() {
   bjPlayer = [bjDeck.pop(), bjDeck.pop()];
   bjDealer = [bjDeck.pop(), {...bjDeck.pop(), hidden:true}];
   setBalance(getBalance() - bjBetAmount);
+  try { dailyTrack('play_blackjack', 1); } catch (e) {}
   gameOpenedXp();
   bjPhase = 'playing';
   lockBets('bj-bet');
@@ -2563,7 +2571,7 @@ function bjFinish() {
   else if (pt === dt) { text='Döntetlen — téted visszajár.'; win=bjBetAmount; }
   else { text='Díler nyert.'; playLose(); }
   setBalance(getBalance()+win);
-  if (win > bjBetAmount) gameWonXp(checkWin(win));
+  if (win > bjBetAmount) gameWonXp(checkWin(win), win);
   renderBJHands();
   document.getElementById('bj-result').innerHTML = win > 0
     ? `<div class="result-win"><div class="result-title">${text}</div><div class="result-amount">Nyeremény: ${win.toLocaleString('hu-HU')} Ft</div></div>`
@@ -2686,6 +2694,7 @@ function roulPlay() {
   roulSpinning = true;
   lockBets('rl-bet'); lockBets('rb-sel');
   setBalance(getBalance() - totalCost);
+  try { dailyTrack('play_roulette', 1); } catch (e) {}
   gameOpenedXp();
   const tok = getTok();
   const outcome = ROUL_NUMS[Math.floor(Math.random()*ROUL_NUMS.length)];
@@ -2726,7 +2735,7 @@ function roulPlay() {
         win = hit ? Math.round(roulBet * mults[roulBetType]) : 0;
       }
       setBalance(getBalance() + win);
-      if (win > 0) gameWonXp(checkWin(win));
+      if (win > 0) gameWonXp(checkWin(win), win);
       const numColor = outcome===0?'#22c55e':RED_NUMS.has(outcome)?'#ef4444':'#94a3b8';
       const landed = document.getElementById('roulette-landed');
       landed.style.display = 'block';
@@ -2801,6 +2810,7 @@ function kenoPlay() {
   lockBets('kn-bet');
   document.querySelectorAll('.knum').forEach(el => el.classList.add('locked'));
   setBalance(getBalance() - kenoBet);
+  try { dailyTrack('play_keno', 1); } catch (e) {}
   gameOpenedXp();
   const tok = getTok();
   for (let i=1;i<=80;i++) { const el = document.getElementById('kn-'+i); if (el) el.className = (kenoSelected.has(i)?'knum selected':'knum') + ' locked'; }
@@ -2821,9 +2831,11 @@ function kenoPlay() {
       document.getElementById('keno-play-btn').disabled=false;
       document.getElementById('keno-play-btn').textContent='🔄 Új kör';
       unlockBets('kn-bet');
-      // KENO XP: min 5 találat → 5 XP, kevesebb → 1 XP (a hivatkozás szerint)
+      // KENO XP: min 5 találat → 5 XP, kevesebb → 1 XP
       kenoCheckXp(hitCount);
+      if (win > 0) gameWonXp(checkWin(win), win);
       if (win >= 1000000) awardXp(10, '1M+ nyeremény');
+      try { dailyTrack('complete_keno', 1); } catch(e) {}
       document.getElementById('keno-result').innerHTML = win > 0
         ? `<div class="result-win"><div class="result-title">🎉 Nyertél! ${hitCount}/${picked} találat (${mult}x)</div><div class="result-amount">+${win.toLocaleString('hu-HU')} Ft</div></div>`
         : `<div class="result-lose"><div class="result-title">😔 ${hitCount} találat — sajnos nem volt elég</div><div class="result-amount">Próbáld újra!</div></div>`;
@@ -2874,6 +2886,7 @@ function slotSpin() {
   slotsSpinning = true;
   lockBets('sl-bet');
   setBalance(getBalance() - slotsBet);
+  try { dailyTrack('spin_slots', 1); } catch (e) {}
   gameOpenedXp();
   const tok = getTok();
   const results = [wSym(),wSym(),wSym()];
@@ -2912,7 +2925,7 @@ function evalSlots(res, tok) {
   else if ([a,b,c].some(s => s==='🍒')) mult=1;
   const win = Math.round(slotsBet * mult);
   setBalance(getBalance() + win);
-  if (win > 0) gameWonXp(checkWin(win));
+  if (win > 0) gameWonXp(checkWin(win), win);
   if (mult >= 100) { playBigWin(); spawnConfetti(70); }
   else if (mult > 1) { playSlotWin(); spawnConfetti(25); }
   else if (mult === 1) playWin();
@@ -2939,7 +2952,7 @@ function makeDeck() {
   const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
   const suits = ['♠','♥','♦','♣'];
   const d = [];
-  for (const s of suits) for (let i=0;i<ranks.length;i++) d.push({rank:ranks[i], val:i+1, suit:s});
+  for (const s of suits) for (let i=0;i<ranks.length;i++) d.push({rank:ranks[i], val:i === 0 ? 14 : i + 1, suit:s});
   for (let i=d.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [d[i],d[j]]=[d[j],d[i]]; }
   return d;
 }
@@ -2974,6 +2987,7 @@ function hiloStart() {
   if (hiloBet > getBalance()) { document.getElementById('hilo-no-bal').style.display='block'; return; }
   document.getElementById('hilo-no-bal').style.display='none';
   setBalance(getBalance() - hiloBet);
+  try { dailyTrack('play_hilo', 1); } catch (e) {}
   gameOpenedXp();
   hiloDeck = makeDeck();
   hiloCurrent = hiloDeck.pop();
@@ -3000,7 +3014,7 @@ function hiloProbAndMult() {
   let higher = 0, lower = 0;
   
   // Csak a magasabb és alacsonyabb lapokat számoljuk, az egyenlőket kihagyjuk a pakliból
-  for (let r=1; r<=13; r++) {
+  for (let r=2; r<=14; r++) {
     let cnt = 4;
     if (r === v) cnt = 0; // Mivel átugorjuk húzáskor, az esélye 0
     if (r > v) higher += cnt;
@@ -3092,12 +3106,13 @@ function finishHilo(cashedOut) {
   if (cashedOut) {
     win = Math.round(hiloBet * hiloMult);
     setBalance(getBalance() + win);
-    gameWonXp(checkWin(win));
+    gameWonXp(checkWin(win), win);
     spawnConfetti(30);
     document.getElementById('hilo-result').innerHTML = `<div class="result-win"><div class="result-title">💰 Kivetted! ${hiloStreak} helyes tipp</div><div class="result-amount">Nyeremény: +${win.toLocaleString('hu-HU')} Ft (${hiloMult.toFixed(2)}x)</div></div>`;
   } else {
     document.getElementById('hilo-result').innerHTML = `<div class="result-lose"><div class="result-title">😔 Vesztettél</div><div class="result-amount">A tét elveszett. ${hiloStreak} sorozat előtt.</div></div>`;
   }
+  try { dailyTrack('complete_hilo', 1); } catch(e) {}
   setTimeout(() => {
     hiloReset();
   }, 2200);
@@ -3365,7 +3380,7 @@ function rtbEndGame(won) {
     spawnConfetti(25);
     const mult = rtbGame ? rtbGame.multipliers[Math.max(0, rtbGame.round - 1)] : 1;
     const profit = rtbGame ? rtbGame.bet * mult - rtbGame.bet : 0;
-    if (profit > 0) gameWonXp(checkWin(profit));
+    if (profit > 0) gameWonXp(checkWin(profit), profit);
   } else {
     playLose();
   }
@@ -3442,6 +3457,7 @@ function pokerStart() {
   }
   document.getElementById('poker-no-bal').style.display = 'none';
   setBalance(getBalance() - pokerBet);
+  try { dailyTrack('play_poker', 1); } catch (e) {}
   gameOpenedXp();
   playClick();
 
@@ -3739,7 +3755,7 @@ function pokerEndMatch() {
     spawnConfetti(45);
     playWin();
     const profit = totalReturn - m.buyIn;
-    if (profit > 0) gameWonXp(checkWin(profit));
+    if (profit > 0) gameWonXp(checkWin(profit), profit);
     document.getElementById('poker-result').innerHTML =
       `<div class="result-win"><div class="result-title">🏆 Megnyerted a meccset!</div>` +
       `<div class="result-amount">Visszakaptál: ${totalReturn.toLocaleString('hu-HU')} Ft (nettó +${Math.max(0,profit).toLocaleString('hu-HU')} Ft, ${m.handNumber} kéz után)</div></div>`;
@@ -4090,112 +4106,186 @@ function pokerCpuAction() {
 })();
 
 // =====================================================
-// ============ NEW: DAILY QUEST SYSTEM ================
+// ============ DAILY QUEST SYSTEM - 6 RANDOM QUEST/NAP (FRISSÍTETT) ==
 // =====================================================
+
 const DQ_POOL = [
-  { id: 'spin_slots',     title: '🎰 Pörgesd meg a slotot 5-ször',          target: 5,  evt: 'spin_slots', difficulty: 'easy', xp: 5 },
-  { id: 'play_plinko',    title: '🪙 Játssz 5 Plinko kört',                  target: 5,  evt: 'play_plinko', difficulty: 'easy', xp: 5 },
-  { id: 'play_blackjack', title: '🃏 Játssz 3 Blackjack kört',               target: 3,  evt: 'play_blackjack', difficulty: 'normal', xp: 10 },
-  { id: 'play_roulette',  title: '🎡 Játssz 4 rulett kört',                  target: 4,  evt: 'play_roulette', difficulty: 'normal', xp: 10 },
-  { id: 'play_keno',      title: '🎯 Játssz 3 Keno kört',                    target: 3,  evt: 'play_keno', difficulty: 'normal', xp: 10 },
-  { id: 'play_hilo',      title: '🎴 Játssz 3 Hi-Lo kört',                   target: 3,  evt: 'play_hilo', difficulty: 'normal', xp: 10 },
-  { id: 'play_coin',      title: '🪙 Dobj fej-vagy-írást 5-ször',            target: 5,  evt: 'play_coin', difficulty: 'easy', xp: 5 },
-  { id: 'play_dice',      title: '🎲 Játssz 5 kockakört',                    target: 5,  evt: 'play_dice', difficulty: 'easy', xp: 5 },
-  { id: 'play_poker',     title: '♠ Játssz 1 Texas Hold\'em meccset',        target: 1,  evt: 'play_poker', difficulty: 'hard', xp: 15 },
-  { id: 'win_round',      title: '🏆 Nyerj 3 kört bármelyik játékban',       target: 3,  evt: 'win_round', difficulty: 'normal', xp: 10 },
-  { id: 'win_round_big',  title: '💎 Nyerj 5 kört bármelyik játékban',       target: 5,  evt: 'win_round', difficulty: 'hard', xp: 15 },
-  { id: 'unique_games',   title: '🎮 Játssz 3 különböző játékkal',           target: 3,  evt: 'unique_games', difficulty: 'normal', xp: 10 }
+  { id: 'spin_slots_15',     title: '🎰 Pörgesd meg a slotot 15-ször',                        target: 15,  evt: 'spin_slots',      xp: 8 },
+  { id: 'play_coin_12',      title: '🪙 Játssz 12 fej-vagy-írás kört',                        target: 12,  evt: 'play_coin',       xp: 8 },
+  { id: 'win_200k',          title: '💰 Nyerj  összesen 200.000 Ft-ot',                             target: 200000, evt: 'win_amount',      xp: 12 },
+  { id: 'win_400k',          title: '💰 Nyerj összesen 400.000 Ft-ot',                             target: 400000, evt: 'win_amount',      xp: 18 },
+  { id: 'complete_keno_30',  title: '🎯 Fejezz le 30 Keno teljes kört',                                target: 30,  evt: 'complete_keno',   xp: 15 },
+  { id: 'complete_hilo_50',  title: '🎴 Fejezz le 50 Hi-Lo teljes kört',                               target: 50,  evt: 'complete_hilo',   xp: 15 },
+  { id: 'win_1m',            title: '🏆 Nyerj összesen 1.000.000 Ft-ot',                           target: 1000000, evt: 'win_amount',     xp: 35 },
+  { id: 'win_coin_150k',     title: '🪙 Nyerj összesen 150.000 Ft-ot fej vagy írásban',            target: 150000, evt: 'win_coin_amount', xp: 22 },
+  { id: 'unique_games',      title: '🎮 Játssz 7 különböző játékot',                          target: 7,   evt: 'unique_games',    xp: 16 },
+  { id: 'big_single_win',    title: '🔥 Nyerj egyszer legalább 75.000 Ft-ot egy körben',           target: 75000, evt: 'single_big_win',  xp: 20 },
+  { id: 'win_250k_daily',    title: '💰 Nyerj 250.000 Ft-ot a mai napon',                          target: 250000, evt: 'win_amount',      xp: 14 },
+  { id: 'keno_big_win',      title: '🎯 Nyerj legalább 50.000 Ft-ot egy Keno körben',              target: 50000, evt: 'keno_big_win',    xp: 18 },
+  { id: 'hilo_streak_5',     title: '🎴 Nyerj 5 Hi-Lo kört egymás után (streak)',                  target: 5,   evt: 'hilo_streak',     xp: 25 }
 ];
 
 function todayKey() {
   const d = new Date();
-  return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');  // ✅ Két számjegy
+  const day = String(d.getDate()).padStart(2, '0');          // ✅ Két számjegy
+  return `${year}-${month}-${day}`;
 }
+
+
 function ensureDailyQuests() {
   const u = curUser();
   if (!u) return;
-  if (!u.daily) u.daily = { date: '', quests: [], gamesPlayed: [] };
+
+  if (!u.daily) u.daily = {};
+
   const today = todayKey();
-  if (u.daily.date !== today) {
-    // Új nap → új küldetések
-    const pool = DQ_POOL.slice();
-    const picked = [];
-    while (picked.length < 5 && pool.length) {
-      const idx = Math.floor(Math.random() * pool.length);
-      const q = pool.splice(idx, 1)[0];
-      picked.push({ id: q.id, title: q.title, target: q.target, progress: 0, claimed: false, xp: q.xp });
-    }
-    u.daily = { date: today, quests: picked, gamesPlayed: [] };
+
+  // ✅ Ellenőrzés: valid quest ID-k az új pool alapján
+  const validIds = DQ_POOL.map(q => q.id);
+  const hasInvalidQuests = Array.isArray(u.daily.quests) && 
+    u.daily.quests.some(q => !validIds.includes(q.id));
+
+  // Ha új nap, nincs 6 quest, VAGY régi/érvénytelen questek vannak → újragenerál
+  if (
+    !u.daily.date || 
+    u.daily.date !== today || 
+    !Array.isArray(u.daily.quests) || 
+    u.daily.quests.length !== 6 ||
+    hasInvalidQuests  // ✅ EZ AZ ÚJ FELTÉTEL
+  ) {
+    
+    const shuffled = DQ_POOL.slice().sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 6);
+
+    u.daily = {
+      date: today,
+      quests: selected.map(q => ({
+        id: q.id,
+        title: q.title,
+        target: q.target,
+        progress: 0,
+        claimed: false,
+        xp: q.xp,
+        evt: q.evt
+      })),
+      gamesPlayed: []
+    };
+
     persist();
+    console.log(`Új 6 napi quest generálva (${today})`);
   }
 }
-function dailyTrack(evt, amount) {
+
+function dailyTrack(evt, amount = 1) {
   const u = curUser();
   if (!u) return;
+
   ensureDailyQuests();
-  amount = amount || 1;
-  // Egyedi-játék számláló: tartsuk a meglátogatott eseményeket
-  const gameEvts = ['spin_slots','play_plinko','play_blackjack','play_roulette','play_keno','play_hilo','play_coin','play_dice','play_poker'];
-  if (gameEvts.includes(evt)) {
-    if (!u.daily.gamesPlayed.includes(evt)) u.daily.gamesPlayed.push(evt);
-  }
+  amount = Number(amount) || 1;
+
+  const gameEvts = ['spin_slots','play_plinko','play_coin','play_dice','play_blackjack','play_roulette','play_keno','play_hilo','play_poker'];
+
   let changed = false;
-  for (const q of u.daily.quests) {
-    if (q.claimed) continue;
-    const def = DQ_POOL.find(p => p.id === q.id);
-    if (!def) continue;
-    if (def.evt === evt) {
-      q.progress = Math.min(q.target, q.progress + amount);
+
+  if (gameEvts.includes(evt)) {
+    if (!u.daily.gamesPlayed.includes(evt)) {
+      u.daily.gamesPlayed.push(evt);
       changed = true;
-    } else if (def.evt === 'unique_games') {
-      const next = u.daily.gamesPlayed.length;
-      if (next > q.progress) { q.progress = Math.min(q.target, next); changed = true; }
     }
   }
+
+  for (const q of u.daily.quests) {
+    if (q.claimed) continue;
+
+    if ((q.evt === 'win_amount' || q.evt === 'win_250k_daily') && evt === 'win_amount' && amount > 0) {
+      q.progress = Math.min(q.target, q.progress + amount);
+      changed = true;
+    }
+    else if (q.evt === 'win_coin_amount' && evt === 'win_coin_amount' && amount > 0) {
+      q.progress = Math.min(q.target, q.progress + amount);
+      changed = true;
+    }
+    else if (q.evt === 'single_big_win' && evt === 'single_big_win' && amount >= q.target) {
+      q.progress = q.target;
+      changed = true;
+    }
+    else if (q.evt === 'keno_big_win' && evt === 'keno_big_win' && amount >= q.target) {
+      q.progress = q.target;
+      changed = true;
+    }
+    else if (q.evt === evt && amount > 0) {
+      q.progress = Math.min(q.target, q.progress + amount);
+      changed = true;
+    }
+    else if (q.evt === 'unique_games') {
+      const count = u.daily.gamesPlayed.length;
+      if (count > q.progress) {
+        q.progress = Math.min(q.target, count);
+        changed = true;
+      }
+    }
+    else if (q.evt === 'hilo_streak' && evt === 'hilo_streak') {
+      q.progress = Math.min(q.target, q.progress + amount);
+      changed = true;
+    }
+  }
+
   if (changed) {
     persist();
     if (document.getElementById('dq-list')) renderDailyQuests();
   }
 }
+
 function renderDailyQuests() {
   const u = curUser();
   const list = document.getElementById('dq-list');
   if (!u || !list) return;
+
   ensureDailyQuests();
   list.innerHTML = '';
+
   for (const q of u.daily.quests) {
     const done = q.progress >= q.target;
+    const pct = q.target > 0 ? Math.round((q.progress / q.target) * 100) : 0;
+
     const card = document.createElement('div');
-    card.className = 'dq-card' + (done ? ' done' : '') + (q.claimed ? ' claimed' : '');
-    const pct = Math.round((q.progress / q.target) * 100);
-    const xpReward = q.xp || 10;
-    card.innerHTML =
-      '<div class="dq-title">' + q.title + '</div>' +
-      '<div class="dq-bar"><div class="dq-fill" style="width:' + pct + '%"></div></div>' +
-      '<div class="dq-row">' +
-        '<span>' + q.progress + ' / ' + q.target + '</span>' +
-        '<span style="color:var(--gold);font-weight:700">+' + xpReward + ' XP</span>' +
-      '</div>' +
-      (q.claimed
-        ? '<button class="dq-claim" disabled>✓ Beváltva</button>'
-        : '<button class="dq-claim" ' + (done ? '' : 'disabled') + ' onclick="claimDailyQuest(\'' + q.id + '\')">' + (done ? 'Beváltás' : 'Folyamatban') + '</button>');
+    card.className = `dq-card ${done ? 'done' : ''} ${q.claimed ? 'claimed' : ''}`;
+
+    card.innerHTML = `
+      <div class="dq-title">${q.title}</div>
+      <div class="dq-bar"><div class="dq-fill" style="width:${pct}%"></div></div>
+      <div class="dq-row">
+        <span>${q.progress} / ${q.target}</span>
+        <span style="color:var(--gold);font-weight:700">+${q.xp} XP</span>
+      </div>
+      ${q.claimed 
+        ? `<button class="dq-claim" disabled>✓ Beváltva</button>`
+        : `<button class="dq-claim" ${done ? '' : 'disabled'} onclick="claimDailyQuest('${q.id}')">
+             ${done ? 'Beváltás' : 'Folyamatban'}
+           </button>`
+      }
+    `;
+
     list.appendChild(card);
   }
 }
+
 function claimDailyQuest(id) {
   const u = curUser();
   if (!u) return;
+
   const q = u.daily.quests.find(x => x.id === id);
   if (!q || q.claimed || q.progress < q.target) return;
+
   q.claimed = true;
-  const xpReward = q.xp || 10;
-  awardXp(xpReward, 'napi küldetés');
+  awardXp(q.xp, 'napi küldetés');
   persist();
-  spawnConfetti(20);
+  spawnConfetti(25);
   renderDailyQuests();
   updateNav();
 }
-
 // =====================================================
 // ============ NEW: PET SYSTEM ========================
 // =====================================================
@@ -4300,38 +4390,9 @@ function launchFlames() {
 }
 
 // =====================================================
-// ============ NEW: GAME HOOKS (track quests) =========
+// ============ GAME TRACKING REMOVED ================
 // =====================================================
-(function() {
-  const wraps = [
-    ['slotSpin',  'spin_slots'],
-    ['plinkoPlay','play_plinko'],
-    ['bjDeal',    'play_blackjack'],
-    ['roulPlay',  'play_roulette'],
-    ['kenoPlay',  'play_keno'],
-    ['hiloStart', 'play_hilo'],
-    ['pokerStart','play_poker']
-  ];
-  for (const [name, evt] of wraps) {
-    const orig = window[name];
-    if (typeof orig !== 'function') continue;
-    window[name] = function() {
-      try { dailyTrack(evt, 1); } catch (e) {}
-      return orig.apply(this, arguments);
-    };
-  }
-  // cfPlay mode-aware
-  const _origCfPlay = window.cfPlay;
-  if (typeof _origCfPlay === 'function') {
-    window.cfPlay = function() {
-      try {
-        const evt = (typeof cfMode !== 'undefined' && cfMode === 'dice') ? 'play_dice' : 'play_coin';
-        dailyTrack(evt, 1);
-      } catch (e) {}
-      return _origCfPlay.apply(this, arguments);
-    };
-  }
-})();
+// Explicit dailyTrack() calls are used inside each game function.
 
 // =====================================================
 // ============ NEW: CUSTOMIZATION SHOP ================
