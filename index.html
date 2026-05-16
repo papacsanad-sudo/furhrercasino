@@ -120,7 +120,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
 .bet-input:disabled{opacity:.5;cursor:not-allowed}
 .bet-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:8px 12px;border-radius:var(--radius);cursor:pointer;font-weight:700;font-size:.9rem;transition:.15s;min-width:40px}
 .bet-btn:hover{background:rgba(245,197,24,.1);border-color:var(--gold);color:var(--gold)}
-.bet-btn:disabled{opacity:.4;cursor:not-allowed}
+.bet-btn.all-in{background:linear-gradient(135deg,#ff4757,#c44569);color:#fff;border:none;font-weight:800}
 .btn-play{background:linear-gradient(135deg,#f5c518,#e6a800);color:#0d1117;font-weight:800;font-size:1rem;padding:13px 36px;border:none;border-radius:var(--radius);cursor:pointer;transition:.2s;box-shadow:0 4px 16px rgba(245,197,24,.25)}
 .btn-play:hover{background:linear-gradient(135deg,#ffd700,#f5c518);transform:translateY(-1px);box-shadow:0 6px 16px rgba(245,197,24,.3)}
 .btn-play:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
@@ -137,7 +137,19 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
 .back-btn:hover{color:var(--gold);border-color:var(--gold)}
 .no-balance{color:var(--red2);font-size:.84rem;text-align:center;margin-top:8px}
 .xp-flash{position:fixed;top:80px;right:20px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;padding:10px 16px;border-radius:10px;font-weight:800;font-size:.9rem;box-shadow:0 6px 20px rgba(139,92,246,.4);z-index:300;animation:xpPop 1.8s ease forwards;pointer-events:none}
+.level-up-flash{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#22c55e,#0ea5e9);color:#fff;padding:14px 20px;border-radius:18px;font-weight:900;font-size:1rem;box-shadow:0 18px 30px rgba(0,0,0,.24);z-index:350;pointer-events:none;animation:levelUpPop .35s ease forwards;text-align:center;line-height:1.2}
+.big-win-flash{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#e11d48);color:#fff;padding:14px 22px;border-radius:18px;font-weight:900;font-size:1rem;box-shadow:0 18px 28px rgba(0,0,0,.28);z-index:350;pointer-events:none;animation:levelUpPop .35s ease forwards;text-align:center;line-height:1.2}
+#billion-challenge-page{min-height:calc(100vh - 30px);padding-top:40px;background:#05070d;color:#f8fafc;}
+#billion-challenge-page .game-title{color:#fbbf24;}
+#billion-challenge-page .game-subtitle{color:#cbd5e1;margin-top:8px;}
+#billion-challenge-page .challenge-box{background:#111827;color:#e2e8f0;border:2px solid #4b5563;border-radius:18px;padding:28px 20px;font-size:1.05rem;font-weight:800;text-align:center;cursor:pointer;user-select:none;transition:.2s;margin-top:20px;}
+#billion-challenge-page .challenge-box.go{background:#16a34a;border-color:#059669;color:#ecfccb;}
+#billion-challenge-page .challenge-box.waiting{background:#1f2937;border-color:#4b5563;color:#cbd5e1;}
+#billion-challenge-page .challenge-result{margin-top:18px;font-size:.98rem;color:#f8fafc;min-height:42px;}
+#billion-challenge-page .btn-play{width:100%;max-width:240px;margin:18px auto 0;display:block;}
+.prison-challenge-active{background:repeating-linear-gradient(45deg,rgba(17,24,39,.9),rgba(17,24,39,.9) 10px,rgba(75,85,99,.95) 10px,rgba(75,85,99,.95) 20px);}
 @keyframes xpPop{0%{transform:translateY(-20px) scale(.8);opacity:0}15%{transform:translateY(0) scale(1.05);opacity:1}85%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-30px) scale(.95);opacity:0}}
+@keyframes levelUpPop{0%{opacity:0;transform:translate(-50%,-20px) scale(.85)}40%{opacity:1;transform:translate(-50%,0) scale(1.05)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:14px;overflow-y:auto}
@@ -278,20 +290,51 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
 .bj-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);margin:14px 0}
 .bj-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
-/* ROULETTE */
-.roulette-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
-#roulette-canvas{border-radius:50%;box-shadow:0 0 30px rgba(245,197,24,.2),0 0 60px rgba(0,0,0,.5);display:block}
-.roulette-result-number{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;margin:0 auto 8px;box-shadow:0 4px 16px rgba(0,0,0,.4);animation:bounceIn .4s ease}
-.roulette-bets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.rbet-btn{padding:9px 6px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-weight:700;cursor:pointer;font-size:.8rem;text-align:center;transition:.2s}
-.rbet-btn:disabled{opacity:.4;cursor:not-allowed}
-.rbet-btn.selected{border-color:var(--gold);background:rgba(245,197,24,.12);color:var(--gold)}
-.rbet-btn.red-bet{border-color:rgba(218,54,51,.4);color:#f87171}
-.rbet-btn.red-bet.selected{background:rgba(218,54,51,.15);border-color:var(--red2)}
-.number-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-top:8px}
-.rnum-btn{aspect-ratio:1;border-radius:6px;border:none;font-weight:700;cursor:pointer;font-size:.72rem;transition:.2s;display:flex;align-items:center;justify-content:center}
-.rnum-btn:disabled{opacity:.4;cursor:not-allowed}
-.rnum-btn.selected{outline:3px solid var(--gold);transform:scale(1.1)}
+/* CRASH GAME */
+#crash-game-container{display:flex;flex-direction:column;gap:16px;max-width:900px;margin:0 auto}
+#crash-canvas{background:linear-gradient(135deg,#0a0e1a,#0d1117);border:2px solid rgba(245,197,24,.3);border-radius:12px;display:block;width:100%;height:300px;box-shadow:0 0 30px rgba(245,197,24,.15)}
+.crash-header-section{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px}
+.crash-multiplier-display{text-align:center;font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#f5c518,#ffd700);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:pulseMult .3s ease}
+@keyframes pulseMult{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+.crash-status{font-size:1rem;font-weight:700;padding:6px 12px;border-radius:8px;background:rgba(35,134,54,.15);color:#4ade80}
+.crash-status.crashed{background:rgba(218,54,51,.15);color:#f87171}
+.crash-history-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px}
+.crash-history-title{font-size:.9rem;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase}
+.crash-history-list{display:flex;gap:6px;flex-wrap:wrap}
+.crash-history-item{background:var(--bg3);border:1px solid rgba(245,197,24,.2);border-radius:8px;padding:6px 10px;font-size:.8rem;font-weight:700;color:var(--gold);text-align:center;min-width:60px}
+.crash-betting-section{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:600px){.crash-betting-section{grid-template-columns:1fr}}
+.crash-bet-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px}
+.crash-bet-label{font-size:.85rem;color:var(--text2);font-weight:600;margin-bottom:8px;display:block}
+.crash-bet-input{width:100%;padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--gold);font-weight:800;font-size:1rem;text-align:center;margin-bottom:8px;outline:none}
+.crash-bet-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,197,24,.1)}
+.crash-bet-buttons{display:flex;gap:6px;justify-content:space-between;margin-bottom:10px}
+.crash-bet-btn{flex:1;padding:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-weight:700;font-size:.8rem;border-radius:6px;cursor:pointer;transition:.2s}
+.crash-bet-btn:hover{background:rgba(245,197,24,.1);border-color:var(--gold);color:var(--gold)}
+.crash-bet-btn:disabled{opacity:.4;cursor:not-allowed}
+.crash-cashout-field{display:flex;gap:6px;align-items:center}
+.crash-cashout-input{flex:1;padding:8px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;color:var(--gold);font-weight:800;font-size:.9rem;text-align:center;outline:none}
+.crash-cashout-input:focus{border-color:var(--gold)}
+.crash-cashout-btn{flex:1;padding:8px;background:linear-gradient(135deg,#f5c518,#e6a800);color:#0d1117;border:none;border-radius:6px;font-weight:800;font-size:.9rem;cursor:pointer;transition:.2s}
+.crash-cashout-btn:hover{background:linear-gradient(135deg,#ffd700,#f5c518);transform:translateY(-1px)}
+.crash-cashout-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.crash-action-btn{width:100%;padding:12px;border:none;border-radius:8px;font-weight:800;font-size:1rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.crash-place-btn{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff}
+.crash-place-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(34,197,94,.3)}
+.crash-place-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.crash-crash-effect{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:4rem;animation:crashShake .6s ease;pointer-events:none;z-index:999}
+@keyframes crashShake{0%{transform:translate(-50%,-50%) scale(1) rotate(0deg);opacity:1}50%{transform:translate(-52%,-48%) scale(1.1) rotate(-5deg)}100%{transform:translate(-48%,-52%) scale(1.2) rotate(5deg);opacity:0}}
+.crash-no-balance{color:var(--red2);font-size:.82rem;text-align:center;margin-top:6px;display:none}
+
+/* DINO GAME */
+#dino-game-container{display:flex;flex-direction:column;gap:16px;max-width:900px;margin:0 auto}
+#dino-canvas{background:linear-gradient(135deg,#87ceeb,#e0f6ff);border:2px solid rgba(245,197,24,.3);border-radius:12px;display:block;width:100%;height:200px;box-shadow:0 0 30px rgba(245,197,24,.15)}
+.dino-stats{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px}
+.dino-score,.dino-highscore,.dino-speed{font-size:1rem;font-weight:700;color:var(--gold)}
+.dino-controls{display:flex;gap:10px;justify-content:center;margin:10px 0}
+.dino-btn{padding:10px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s}
+.dino-btn:hover{background:linear-gradient(135deg,#16a34a,#15803d);transform:translateY(-1px)}
+.dino-instructions{text-align:center;color:var(--text2);font-size:.9rem;margin-top:10px}
 
 /* KENO */
 .keno-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:0 auto;max-width:540px}
@@ -476,7 +519,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
 
 @media(max-width:600px){
   .games-grid{grid-template-columns:1fr}
-  .roulette-bets-grid{grid-template-columns:repeat(2,1fr)}
+
   .keno-grid{grid-template-columns:repeat(8,1fr)}
   .nav-btn{font-size:.78rem;padding:6px 10px}
   .logo{font-size:1.1rem}
@@ -507,15 +550,15 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
   <span id="user-avatar" style="margin-right:8px">👤</span>
 </span>
     <button class="nav-btn lb" id="nav-lb-btn" onclick="openLeaderboard()">🏆 Ranglista</button>
-    <button class="nav-btn bp" onclick="openBattlePass()">🎟️ Battle Pass <span class="lvl-badge" id="nav-lvl">L0</span></button>
-    <button class="nav-btn" onclick="openCustomShop()" style="border-color:rgba(139,92,246,.4);color:#c4b5fd">🐳 Szerkesztés</button>
+    <button class="nav-btn bp" id="nav-bp-btn" onclick="openBattlePass()">🎟️ Battle Pass <span class="lvl-badge" id="nav-lvl">L0</span></button>
+    <button class="nav-btn" id="nav-edit-btn" onclick="openCustomShop()" style="border-color:rgba(139,92,246,.4);color:#c4b5fd">🐳 Szerkesztés</button>
   </div>
   <div class="nav-right">
     <button class="nav-btn" onclick="toggleMute()" id="mute-btn">🔊</button>
     <button id="balance-btn" onclick="openBalanceModal()">
       <span>💰</span><span class="balance-val" id="nav-balance">0 Ft</span>
     </button>
-    <button class="nav-btn" onclick="doLogout()">Kilépés</button>
+    <button class="nav-btn" id="nav-logout-btn" onclick="doLogout()">Kilépés</button>
   </div>
 </div>
 
@@ -562,14 +605,21 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
   </div>
 
   <div class="games-grid">
-    <div class="game-card" onclick="showGame('plinko')"><div class="game-icon">🪙</div><div class="game-name">Plinko</div><div class="game-desc">Ejtsd le a labdát! Saját skin, valódi pattogás. Akár 500x szorzó!</div><div class="game-tag">Skin Támogatás</div><div class="game-arrow">→</div></div>
+    <div class="game-card" onclick="showGame('plinko')"><div class="game-icon">🪙</div><div class="game-name">Plinko</div><div class="game-desc">Ejtsd le a labdát! Akár 3x szorzó!</div><div class="game-tag">Skin Támogatás</div><div class="game-arrow">→</div></div>
     <div class="game-card" onclick="showGame('coinflip')"><div class="game-icon">🎲</div><div class="game-name">Kocka / Érmejáték</div><div class="game-desc">Fej-Írás (2x) vagy találj kockát (6x).</div><div class="game-tag">Gyors Játék</div><div class="game-arrow">→</div></div>
     <div class="game-card" onclick="showGame('blackjack')"><div class="game-icon">🃏</div><div class="game-name">Blackjack</div><div class="game-desc">21 pontig — verd meg a dílert! BJ = 3:2.</div><div class="game-tag">Klasszikus</div><div class="game-arrow">→</div></div>
-    <div class="game-card" onclick="showGame('roulette')"><div class="game-icon">🎡</div><div class="game-name">Rulett</div><div class="game-desc">Piros/fekete, tucatok, vagy egy szám (35x).</div><div class="game-tag">Luxus</div><div class="game-arrow">→</div></div>
-    <div class="game-card" onclick="showGame('keno')"><div class="game-icon">🎯</div><div class="game-name">Keno</div><div class="game-desc">Válassz 1-10 számot 80-ból. Min. 5 találat = XP.</div><div class="game-tag">Lottó</div><div class="game-arrow">→</div></div>
+    <div class="game-card" onclick="showGame('crash')"><div class="game-icon">🚀</div><div class="game-name">Crash</div><div class="game-desc">Szállj ki mielőtt le zuhan az űrhajó!</div><div class="game-tag">Új!</div><div class="game-arrow">→</div></div>
+    <div class="game-card" onclick="showGame('keno')"><div class="game-icon">🎯</div><div class="game-name">Keno</div><div class="game-desc">Válassz 1-10 számot 80-ból. Min. 5 találat = XP.</div><div class="game-tag">Szerencsejáték Zrt.</div><div class="game-arrow">→</div></div>
     <div class="game-card" onclick="showGame('slots')"><div class="game-icon">🎰</div><div class="game-name">Nyerőgép (Slot)</div><div class="game-desc">3 dobos klasszikus. Akár 500x szorzó!</div><div class="game-tag">Vegas</div><div class="game-arrow">→</div></div>
-    <div class="game-card" onclick="showGame('hilo')"><div class="game-icon">🎴</div><div class="game-name">Hi-Lo</div><div class="game-desc">Magasabb vagy alacsonyabb? Növelj sorozatot, és vedd ki a nyereményt!</div><div class="game-tag">Új!</div><div class="game-arrow">→</div></div>
-    <div class="game-card" onclick="showGame('rtb')"><div class="game-icon">🚌</div><div class="game-name">Ride the Bus</div><div class="game-desc">4 kört játszol, minden körben tippelsz, majd kapsz egy lapot. Jól tippelj és nyerj!</div><div class="game-tag">Új! · Izgalmas</div><div class="game-arrow">→</div></div>
+    <div class="game-card" onclick="showGame('hilo')"><div class="game-icon">🎴</div><div class="game-name">Hi-Lo</div><div class="game-desc">Magasabb vagy alacsonyabb? Növelj sorozatot, és vedd ki a nyereményt!</div><div class="game-tag">H or L</div><div class="game-arrow">→</div></div>
+    <div class="game-card" onclick="showGame('rtb')"><div class="game-icon">🚌</div><div class="game-name">Ride the Bus</div><div class="game-desc">4 kört játszol, minden körben tippelsz, majd kapsz egy lapot. Tippelj jól és nyerj!</div><div class="game-tag">Bus</div><div class="game-arrow">→</div></div>
+    <div id="dino-menu-card" class="game-card locked" style="display:none;">
+      <div class="game-icon">🦕🔒</div>
+      <div class="game-name">Dínós Játék</div>
+      <div class="game-desc">Google Dino remake — elérhető 5 milliárd Ft után!</div>
+      <div class="game-tag">Zárva</div>
+      <div class="game-arrow">→</div>
+    </div>
   </div>
 </div>
 
@@ -589,7 +639,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
     </div>
     <div class="custom-card">
       <h3>🖱️ Gomb elrendezés</h3>
-      <div class="desc">Húzd a "Ranglista" és "Egyenleg" gombot bárhova az oldalon. Maximum 2 gomb.</div>
+      <div class="desc">Húzd a felső menü gombjait bárhova az oldalon. Most már több gombot is áthelyezhetsz.</div>
       <div class="price" id="cs-drag-price">Ár: 1.000.000 Ft (egyszeri)</div>
       <button onclick="openBtnDragMode()">🖱️ Aktiválás</button>
     </div>
@@ -618,6 +668,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
       <input class="bet-input pl-bet" type="text" id="plinko-bet" value="100" oninput="plinkoBetInput(this)"/>
       <button class="bet-btn pl-bet" onclick="plinkoAdj(100)">+</button>
       <button class="bet-btn pl-bet" onclick="plinkoAdj(1000)">++</button>
+      <button class="bet-btn all-in pl-bet" onclick="setAllIn('plinko-bet')">All In</button>
     </div>
     <div style="text-align:center">
       <button class="btn-play" id="plinko-play-btn" onclick="plinkoPlay()">🪙 Labda ledobása</button>
@@ -663,6 +714,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
       <input class="bet-input cf-bet" type="text" id="cf-bet" value="100" oninput="cfBetInput(this)"/>
       <button class="bet-btn cf-bet" onclick="cfAdj(100)">+</button>
       <button class="bet-btn cf-bet" onclick="cfAdj(1000)">++</button>
+      <button class="bet-btn all-in cf-bet" onclick="setAllIn('cf-bet')">All In</button>
     </div>
     <div style="text-align:center">
       <button class="btn-play" id="cf-play-btn" onclick="cfPlay()">▶ Játék</button>
@@ -692,6 +744,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
         <input class="bet-input bj-bet" type="text" id="bj-bet" value="100" oninput="bjBetInput(this)"/>
         <button class="bet-btn bj-bet" onclick="bjAdj(100)">+</button>
         <button class="bet-btn bj-bet" onclick="bjAdj(1000)">++</button>
+        <button class="bet-btn all-in bj-bet" onclick="setAllIn('bj-bet')">All In</button>
       </div>
       <div style="text-align:center">
         <button class="btn-play" id="bj-deal-btn" onclick="bjDeal()">🃏 Lapok osztása</button>
@@ -709,46 +762,75 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
   </div>
 </div>
 
-<!-- ROULETTE -->
-<div id="roulette-page" class="page">
+<!-- CRASH GAME -->
+<div id="crash-page" class="page">
   <button class="back-btn" onclick="goHome()">← Főmenü</button>
-  <div class="game-header"><div class="game-title">🎡 Rulett</div><div class="game-subtitle">Pörgesd meg a kereket és nyerj!</div></div>
-  <div class="game-panel">
-    <div class="roulette-wrap">
-      <canvas id="roulette-canvas" width="300" height="300"></canvas>
-      <div id="roulette-landed" style="display:none;text-align:center"></div>
+  <div class="game-header"><div class="game-title">🚀 Crash Game</div><div class="game-subtitle">Repüld le az űrhajót mielőtt lezuhan!</div></div>
+  <div id="crash-game-container">
+    <canvas id="crash-canvas"></canvas>
+    <div class="crash-header-section">
+      <div>
+        <div style="font-size:.8rem;color:var(--text2);margin-bottom:4px">SZORZÓ</div>
+        <div class="crash-multiplier-display" id="crash-mult-display">1.00x</div>
+      </div>
+      <div>
+        <div style="font-size:.8rem;color:var(--text2);margin-bottom:4px">ÁLLAPOT</div>
+        <div class="crash-status" id="crash-status">Tét megadása...</div>
+      </div>
+      <div style="flex:1;text-align:right">
+        <div style="font-size:.8rem;color:var(--text2);margin-bottom:4px">EGYENLEG</div>
+        <div style="font-size:1.3rem;font-weight:900;color:var(--gold)" id="crash-bal-display">0 Ft</div>
+      </div>
     </div>
+    <div class="crash-history-box">
+      <div class="crash-history-title">Utolsó 5 kör</div>
+      <div class="crash-history-list" id="crash-history-list"></div>
+    </div>
+    <div class="crash-betting-section">
+      <div class="crash-bet-panel">
+        <label class="crash-bet-label">Téted (Ft)</label>
+        <input class="crash-bet-input" type="text" id="crash-bet-amount" value="100" />
+        <div class="crash-bet-buttons">
+          <button class="crash-bet-btn" onclick="crashAdjBet(-1000)">-1K</button>
+          <button class="crash-bet-btn" onclick="crashAdjBet(-100)">-100</button>
+          <button class="crash-bet-btn" onclick="crashAdjBet(100)">+100</button>
+          <button class="crash-bet-btn" onclick="crashAdjBet(1000)">+1K</button>
+        </div>
+        <button class="crash-action-btn crash-place-btn" id="crash-place-btn" onclick="crashPlaceBet()">🎮 Tét elhelyezése</button>
+        <button class="crash-action-btn crash-place-btn" id="crash-buy-btn" onclick="openCrashBuyModal()" style="display:none;margin-top:10px">🛒 Crash feloldása 1.500.000 Ft</button>
+        <div class="crash-no-balance" id="crash-access-hint" style="display:none;margin-top:8px">A Crash játékhoz 1.500.000 Ft feloldás szükséges.</div>
+        <div class="crash-no-balance" id="crash-no-bal">Nincs elég egyenleged!</div>
+      </div>
+      <div class="crash-bet-panel">
+        <label class="crash-bet-label">Automatikus kiszállás (szorzó)</label>
+        <div class="crash-cashout-field">
+          <input class="crash-cashout-input" type="text" id="crash-auto-cashout" value="2.00" placeholder="pl. 2.00" />
+        </div>
+        <div style="margin-top:10px;font-size:.8rem;color:var(--text2);text-align:center">Hagyjd ezt üresen a kézi kiszálláshoz</div>
+        <button class="crash-cashout-btn" id="crash-cashout-btn" onclick="crashCashOut()" disabled>💰 Kiszállás</button>
+      </div>
+    </div>
+    <div id="crash-result"></div>
   </div>
-  <div class="game-panel">
-    <div style="margin-bottom:8px;font-size:.85rem;color:var(--text2);font-weight:600">Fogadás típusa:</div>
-    <div class="roulette-bets-grid">
-      <button class="rbet-btn red-bet rb-sel selected" id="rbet-red" onclick="selectRBet('red')">🔴 Piros (2x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-black" onclick="selectRBet('black')">⚫ Fekete (2x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-even" onclick="selectRBet('even')">Páros (2x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-odd" onclick="selectRBet('odd')">Páratlan (2x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-low" onclick="selectRBet('low')">1-18 (2x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-high" onclick="selectRBet('high')">19-36 (2x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-d1" onclick="selectRBet('d1')">1-12 (3x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-d2" onclick="selectRBet('d2')">13-24 (3x)</button>
-      <button class="rbet-btn rb-sel" id="rbet-d3" onclick="selectRBet('d3')">25-36 (3x)</button>
+</div>
+
+<!-- DINO GAME -->
+<div id="dino-page" class="page">
+  <button class="back-btn" onclick="goHome()">← Főmenü</button>
+  <div class="game-header"><div class="game-title">🦕 Dínós Játék</div><div class="game-subtitle">Google Dino remake — ugrálj, hajolj, kerüld az akadályokat!</div></div>
+  <div id="dino-game-container">
+    <canvas id="dino-canvas" width="800" height="200"></canvas>
+    <div class="dino-stats">
+      <div class="dino-score">Pontszám: <span id="dino-score">0</span></div>
+      <div class="dino-highscore">Rekord: <span id="dino-highscore">0</span></div>
+      <div class="dino-speed">Sebesség: <span id="dino-speed">6</span></div>
     </div>
-    <div style="margin:10px 0;font-size:.85rem;color:var(--text2)">Vagy egy számra (35x) — maximum 3 számot választhatsz:</div>
-    <div class="number-grid" id="roulette-number-grid"></div>
-    <div style="margin-top:8px;font-size:.82rem;color:var(--text2)" id="roulette-num-info">Kiválasztott számok: 0/3</div>
-  </div>
-  <div id="roulette-result"></div>
-  <div class="game-panel">
-    <div class="bet-row">
-      <span class="bet-label">Tét:</span>
-      <button class="bet-btn rl-bet" onclick="roulAdj(-1000)">−−</button>
-      <button class="bet-btn rl-bet" onclick="roulAdj(-100)">−</button>
-      <input class="bet-input rl-bet" type="text" id="roul-bet" value="100" oninput="roulBetInput(this)"/>
-      <button class="bet-btn rl-bet" onclick="roulAdj(100)">+</button>
-      <button class="bet-btn rl-bet" onclick="roulAdj(1000)">++</button>
+    <div class="dino-controls">
+      <button class="dino-btn" onclick="startDinoGame()">🎮 Indítás</button>
     </div>
-    <div style="text-align:center">
-      <button class="btn-play" id="roul-play-btn" onclick="roulPlay()">🎡 Pörgetés!</button>
-      <div class="no-balance" id="roul-no-bal" style="display:none">Nincs elég egyenleged!</div>
+    <div class="dino-instructions">
+      <p><strong>Irányítás:</strong> SPACE vagy ↑ ugrás, ↓ lehajolás</p>
+      <p><strong>Cél:</strong> Kerüld az akadályokat, gyűjtögesd a pontokat!</p>
     </div>
   </div>
 </div>
@@ -771,6 +853,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
       <input class="bet-input kn-bet" type="text" id="keno-bet" value="100" oninput="kenoBetInput(this)"/>
       <button class="bet-btn kn-bet" onclick="kenoAdj(100)">+</button>
       <button class="bet-btn kn-bet" onclick="kenoAdj(1000)">++</button>
+      <button class="bet-btn all-in kn-bet" onclick="setAllIn('keno-bet')">All In</button>
     </div>
     <div style="text-align:center">
       <button class="btn-play" id="keno-play-btn" onclick="kenoPlay()">🎯 Húzás!</button>
@@ -818,6 +901,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
       <input class="bet-input sl-bet" type="text" id="slots-bet" value="100" oninput="slotsBetInput(this)"/>
       <button class="bet-btn sl-bet" onclick="slotsAdj(100)">+</button>
       <button class="bet-btn sl-bet" onclick="slotsAdj(1000)">++</button>
+      <button class="bet-btn all-in sl-bet" onclick="setAllIn('slots-bet')">All In</button>
     </div>
     <div class="no-balance" id="slots-no-bal" style="display:none;text-align:center">Nincs elég egyenleged!</div>
   </div>
@@ -853,6 +937,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
       <input class="bet-input hl-bet" type="text" id="hilo-bet" value="100" oninput="hiloBetInput(this)"/>
       <button class="bet-btn hl-bet" onclick="hiloAdj(100)">+</button>
       <button class="bet-btn hl-bet" onclick="hiloAdj(1000)">++</button>
+      <button class="bet-btn all-in hl-bet" onclick="setAllIn('hilo-bet')">All In</button>
     </div>
     <div style="text-align:center">
       <button class="btn-play" id="hilo-start-btn" onclick="hiloStart()">🎴 Játék indítása</button>
@@ -882,6 +967,7 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
       <input class="bet-input rtb-bet" type="text" id="rtb-bet" value="1000" oninput="rtbBetInput(this)"/>
       <button class="bet-btn rtb-bet" onclick="rtbAdj(100)">+</button>
       <button class="bet-btn rtb-bet" onclick="rtbAdj(1000)">++</button>
+      <button class="bet-btn all-in rtb-bet" onclick="setAllIn('rtb-bet')">All In</button>
     </div>
     <div style="text-align:center">
       <button class="btn-play" id="rtb-start-btn" onclick="rtbStart()">▶ Játék indítása!</button>
@@ -938,6 +1024,19 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
   </div>
 </div>
 
+<div id="billion-challenge-page" class="page">
+  <div class="game-header" style="text-align:center;">
+    <div class="game-title">1 MILLIÁRD FORINT KIHÍVÁS</div>
+    <div class="game-subtitle">Csak az kapja meg a nyereményét, aki teljesíti a reakciómérést 450 ms alatt.</div>
+  </div>
+  <div class="game-panel" style="max-width:760px;margin:0 auto;background:rgba(15,23,42,.95);border:1px solid rgba(148,163,184,.16);box-shadow:0 20px 70px rgba(0,0,0,.45);border-radius:20px;padding:28px;">
+    <p style="color:#e2e8f0;font-size:.96rem;line-height:1.7;">Elérted az 1.000.000.000 Ft feletti nyereményt. Ez a külön oldal azt jelzi, hogy most egy speciális reakciómérési feladatot kell teljesítened. Kattints a START gombra, majd amikor a négyzet zöldre vált, kattints rá azonnal. 450 ms alatt kell reagálnod.</p>
+    <div class="challenge-box waiting" id="challenge-box" onclick="attemptBillionReaction()">Kattints a START gombra és várj a zöldre</div>
+    <button class="btn-play" id="challenge-start-btn" onclick="startBillionChallenge()">START</button>
+    <div class="challenge-result" id="challenge-result-msg" style="margin-top:18px;color:#f8fafc;min-height:42px;"></div>
+  </div>
+</div>
+
 <!-- PLINKO VÁSÁRLÁS MODAL -->
 <div class="modal-overlay hidden" id="plinko-buy-modal">
   <div class="modal">
@@ -968,6 +1067,57 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
     <div class="confirm-row">
       <button class="confirm-yes" onclick="buyRtbGame()">💰 Megveszem!</button>
       <button class="confirm-no" onclick="closeRtbModal()">Mégse</button>
+    </div>
+  </div>
+</div>
+
+<!-- CRASH VÁSÁRLÁS MODAL -->
+<div class="modal-overlay hidden" id="crash-buy-modal">
+  <div class="modal">
+    <span class="modal-icon">🚀</span>
+    <div class="modal-title">Crash feloldása</div>
+    <p style="color:var(--text2);font-size:.9rem;margin:14px 0">A Crash játékmenet eléréséhez egyszeri feloldás szükséges.</p>
+    <div style="background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);border-radius:10px;padding:14px;margin:14px 0;text-align:center">
+      <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">1.500.000 Ft</div>
+      <div style="font-size:.85rem;color:var(--text2);margin-top:6px">Egyszeri költség — a játék azt követően elérhető marad.</div>
+    </div>
+    <div class="confirm-row">
+      <button class="confirm-yes" onclick="buyCrashGame()">💰 Megveszem!</button>
+      <button class="confirm-no" onclick="closeCrashModal()">Mégse</button>
+    </div>
+  </div>
+</div>
+
+<!-- DINO OFFER MODAL -->
+<div class="modal-overlay hidden" id="dino-offer-modal">
+  <div class="modal">
+    <span class="modal-icon">🦕</span>
+    <div class="modal-title">Dínós Játék Megvásárlása!</div>
+    <p style="color:var(--text2);font-size:.9rem;margin:14px 0">Gratulálunk! Elérted az 5 milliárd Ft-ot! Most megvásárolhatod a prémium Dínós játékot.</p>
+    <div style="background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);border-radius:10px;padding:14px;margin:14px 0;text-align:center">
+      <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">4.500.000.000 Ft</div>
+      <div style="font-size:.85rem;color:var(--text2);margin-top:6px">Egyszeri költség — teljes Google Dino remake játék.</div>
+    </div>
+    <div class="confirm-row">
+      <button class="confirm-yes" onclick="buyDinoGame()">💰 Megveszem!</button>
+      <button class="confirm-no" onclick="closeDinoOfferModal()">Később</button>
+    </div>
+  </div>
+</div>
+
+<!-- DINO BUY MODAL -->
+<div class="modal-overlay hidden" id="dino-buy-modal">
+  <div class="modal">
+    <span class="modal-icon">🦕🔒</span>
+    <div class="modal-title">Dínós Játék Megvásárlása</div>
+    <p style="color:var(--text2);font-size:.9rem;margin:14px 0">A prémium Dínós játék megvásárlásához el kell érned az 5 milliárd Ft-ot.</p>
+    <div style="background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);border-radius:10px;padding:14px;margin:14px 0;text-align:center">
+      <div style="font-size:1.2rem;font-weight:800;color:var(--gold)">4.500.000.000 Ft</div>
+      <div style="font-size:.85rem;color:var(--text2);margin-top:6px">Egyszeri költség — teljes Google Dino remake játék.</div>
+    </div>
+    <div class="confirm-row">
+      <button class="confirm-yes" onclick="buyDinoGame()">💰 Megveszem!</button>
+      <button class="confirm-no" onclick="closeDinoBuyModal()">Mégse</button>
     </div>
   </div>
 </div>
@@ -1101,6 +1251,17 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
   </div>
 </div>
 
+<!-- INFO MESSAGE MODAL -->
+<div class="modal-overlay hidden" id="info-modal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-title" id="info-title">Információ</div>
+    <p id="info-msg" style="font-size:.88rem;color:var(--text2);margin:10px 0;line-height:1.5"></p>
+    <div style="text-align:center">
+      <button class="confirm-yes" onclick="closeModal('info-modal')" style="width:auto;padding:10px 30px">OK</button>
+    </div>
+  </div>
+</div>
+
 <!-- DRAG MODE BANNER -->
 <div id="drag-mode-banner" style="display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f5c518,#d97706);color:#000;padding:10px 22px;border-radius:24px;font-weight:800;z-index:200;box-shadow:0 4px 16px rgba(245,197,24,.5)">
   🖱️ Húzd a gombokat a kívánt helyre · <button onclick="exitBtnDragMode()" style="background:#000;color:#f5c518;border:none;padding:5px 14px;border-radius:14px;font-weight:800;cursor:pointer;margin-left:8px">Kész</button>
@@ -1166,7 +1327,7 @@ async function saveToCloud() {
 await db.collection('users').doc(username).set({
   balance: Math.max(0, u.balance || 0),
   xp: Math.max(0, u.xp || 0),
-  claimedRewards: u.claimedRewards || [],        // ← ÚJ
+  claimedRewards: u.claimedRewards || [],
   ownedBalls: u.ownedBalls || ["default"],
   selectedBall: u.selectedBall || "default",
   ownedAvatars: u.ownedAvatars || [],
@@ -1174,25 +1335,40 @@ await db.collection('users').doc(username).set({
   frames: u.frames || [],
   currentFrame: u.currentFrame || null,
   bgGradientOwned: !!u.bgGradientOwned,
-  bgGradient: u.bgGradient || null,              // ← ÚJ
+  bgGradient: u.bgGradient || null,
   btnDragOwned: !!u.btnDragOwned,
-  btnPositions: u.btnPositions || {},             // ← ÚJ
-  plinkoOwned: !!u.plinkoOwned,                  // ← ÚJ
-  rtbOwned: !!u.rtbOwned,                        // ← ÚJ
-  pet: u.pet || { stage: 0 },                    // ← ÚJ
+  btnPositions: u.btnPositions || {},
+  plinkoOwned: !!u.plinkoOwned,
+  rtbOwned: !!u.rtbOwned,
+  crashOwned: !!u.crashOwned,
+  dinoOwned: !!u.dinoOwned,
+  pet: u.pet || { stage: 0 },
   daily: u.daily || null,
   usedCodes: u.usedCodes || [],
-  passwordHash: u.passwordHash || '',            // ← ÚJ
+  passwordHash: u.passwordHash || '',
   lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-}, { merge: true });                             // ← merge:true
+}, { merge: true });
   } catch (e) {
     console.warn('Cloud mentés sikertelen:', e);
   }
 }
 
+async function saveBtnPositionsToCloud() {
+  const u = curUser();
+  const username = DB.currentUser;
+  if (!u || !username) return;
+  try {
+    await db.collection('users').doc(username).set({
+      btnPositions: u.btnPositions || {}
+    }, { merge: true });
+  } catch (e) {
+    console.warn('Btn position cloud save sikertelen:', e);
+  }
+}
+
 function persist() {
   saveDB(DB);
-  saveToCloud();           // ← Fontos: minden persist után mentsük a felhőbe is
+  saveToCloud();
   schedulePushLeaderboard();
 }
 
@@ -1263,7 +1439,8 @@ DB.users[username] = {
   bgGradient: null,
   btnPositions: {},
   plinkoOwned: false,
-      rtbOwned: false,
+  rtbOwned: false,
+  crashOwned: false,
   daily: null,
   ...userData
 };
@@ -1298,6 +1475,8 @@ window.addEventListener('load', async () => {
           btnPositions: {},
           plinkoOwned: false,
           rtbOwned: false,
+          crashOwned: false,
+          dinoOwned: false,                        // ← ÚJ
           stats: {},
           daily: null,
           ...doc.data()   // ← Firestore felülírja a default értékeket
@@ -1372,6 +1551,9 @@ function awardXp(amount, reason) {
     u.xp = newXp;
   }
   persist();
+  if (newLvl > oldLvl) {
+    showLevelUpNotification(oldLvl, newLvl);
+  }
   flashXp('+' + amount + ' XP' + (reason ? ' (' + reason + ')' : ''));
   updateNav();
 }
@@ -1384,6 +1566,140 @@ function flashXp(text) {
   setTimeout(() => el.remove(), 1900);
 }
 
+function showLevelUpNotification(oldLvl, newLvl) {
+  const existing = document.getElementById('level-up-notice');
+  if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.id = 'level-up-notice';
+  el.className = 'level-up-flash';
+  el.innerHTML = `Szintlépés!<br><span>Mostantól L${newLvl}</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2500);
+}
+
+function showBigWinNotification(amount) {
+  const existing = document.getElementById('big-win-notice');
+  if (existing) existing.remove();
+  const el = document.createElement('div');
+  el.id = 'big-win-notice';
+  el.className = 'big-win-flash';
+  el.innerHTML = `Gratulálok!<br><span>+${amount.toLocaleString('hu-HU')} Ft nyeremény!</span>`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2500);
+}
+
+let billionChallengeState = {
+  active: false,
+  amount: 0,
+  startTime: 0,
+  timeoutId: null,
+  ready: false,
+  previousPage: null
+};
+
+function handleBigWin(amount) {
+  if (amount >= 1000000000) {
+    showBillionChallengePage(amount);
+  } else if (amount >= 1000000) {
+    showBigWinNotification(amount);
+  }
+}
+
+function getCurrentPageId() {
+  const active = document.querySelector('.page.active');
+  return active ? active.id : 'menu-page';
+}
+
+function showBillionChallengePage(amount) {
+  billionChallengeState.active = true;
+  billionChallengeState.amount = amount;
+  billionChallengeState.ready = false;
+  billionChallengeState.previousPage = getCurrentPageId();
+  const box = document.getElementById('challenge-box');
+  const msg = document.getElementById('challenge-result-msg');
+  const btn = document.getElementById('challenge-start-btn');
+  if (!box || !msg || !btn) return;
+  msg.textContent = '';
+  box.className = 'challenge-box waiting';
+  box.textContent = 'Kattints a START gombra és várj a zöldre';
+  btn.disabled = false;
+  btn.textContent = 'START';
+  document.getElementById('navbar').style.display = 'none';
+  document.body.classList.add('prison-challenge-active');
+  showPage('billion-challenge-page');
+}
+
+function startBillionChallenge() {
+  if (!billionChallengeState.active) return;
+  const box = document.getElementById('challenge-box');
+  const msg = document.getElementById('challenge-result-msg');
+  const btn = document.getElementById('challenge-start-btn');
+  if (!box || !msg || !btn) return;
+  btn.disabled = true;
+  msg.textContent = 'Várj a zöld jelre...';
+  box.className = 'challenge-box waiting';
+  box.textContent = 'Ne kattints még!';
+  billionChallengeState.ready = false;
+  clearTimeout(billionChallengeState.timeoutId);
+  const delay = 1200 + Math.floor(Math.random() * 1200);
+  billionChallengeState.timeoutId = setTimeout(() => {
+    if (!billionChallengeState.active) return;
+    billionChallengeState.ready = true;
+    billionChallengeState.startTime = performance.now();
+    box.className = 'challenge-box go';
+    box.textContent = 'KATTINTS MOST!';
+    msg.textContent = 'Zöld lett! Azonnal kattints!';
+    billionChallengeState.timeoutId = setTimeout(() => {
+      if (!billionChallengeState.active) return;
+      finalizeBillionChallenge(false);
+    }, 450);
+  }, delay);
+}
+
+function attemptBillionReaction() {
+  if (!billionChallengeState.active) return;
+  const now = performance.now();
+  const box = document.getElementById('challenge-box');
+  const msg = document.getElementById('challenge-result-msg');
+  if (!box || !msg) return;
+  if (!billionChallengeState.ready) {
+    msg.textContent = 'Túl korán kattintottál, vesztettél.';
+    finalizeBillionChallenge(false);
+    return;
+  }
+  const elapsed = now - billionChallengeState.startTime;
+  const success = elapsed <= 450;
+  msg.textContent = success ? `Siker! Reagáltál ${Math.round(elapsed)} ms alatt.` : `Sajnos ${Math.round(elapsed)} ms lett, nem sikerült 450 ms alatt.`;
+  finalizeBillionChallenge(success);
+}
+
+function finalizeBillionChallenge(success) {
+  if (!billionChallengeState.active) return;
+  clearTimeout(billionChallengeState.timeoutId);
+  const box = document.getElementById('challenge-box');
+  const msg = document.getElementById('challenge-result-msg');
+  if (!box) return;
+  if (!success) {
+    const current = getBalance();
+    const refund = billionChallengeState.amount;
+    setBalance(Math.max(0, current - refund));
+    if (msg) msg.textContent = 'Nem sikerült a reakciómérés. A nyeremény összege nem marad nálad.';
+  } else {
+    showBigWinNotification(billionChallengeState.amount);
+  }
+  billionChallengeState.active = false;
+  billionChallengeState.ready = false;
+  box.className = 'challenge-box waiting';
+  box.textContent = 'A kihívás lezárult.';
+  const nextPage = billionChallengeState.previousPage || 'menu-page';
+  document.getElementById('navbar').style.display = 'flex';
+  document.body.classList.remove('prison-challenge-active');
+  setTimeout(() => {
+    showPage(nextPage);
+    if (msg) msg.textContent = '';
+  }, 1200);
+}
+
 // XP-t adunk a játékesemény alapján
 function gameOpenedXp() { awardXp(1, 'játék'); }
 function gameWonXp(big, amount = 0) {
@@ -1391,6 +1707,7 @@ function gameWonXp(big, amount = 0) {
   if (big) awardXp(10, 'NAGY NYEREMÉNY 1M+'); // bónusz 1M Ft+ nyereményre
   if (amount > 0) {
     try { dailyTrack('win_amount', amount); } catch(e){}
+    handleBigWin(amount);
   }
   try { dailyTrack('win_round', 1); } catch(e){}
   try { triggerWinEffects(big); } catch(e){}
@@ -1654,9 +1971,10 @@ function doLogout() {
 // APP INIT
 // =====================================================
 window.addEventListener('DOMContentLoaded', () => {
-  initRoulette();
+  initCrash();
   initKeno();
   initSlots();
+  initDino();
   checkPwRules();
   const u = curUser();
   if (u) {
@@ -1664,6 +1982,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (u.xp === undefined) u.xp = 0;
     if (!u.claimedRewards) u.claimedRewards = [];
     if (!u.ownedBalls || u.ownedBalls.length === 0) u.ownedBalls = ['default'];
+    if (u.crashOwned === undefined) u.crashOwned = false;
     if (!u.selectedBall || !BALL_DEFS[u.selectedBall]) u.selectedBall = 'default';
     if (!u.usedCodes) u.usedCodes = [];
     if (!u.stats) u.stats = { wins: 0, losses: 0, totalWon: 0 };
@@ -1679,6 +1998,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!u.btnPositions || typeof u.btnPositions !== 'object') u.btnPositions = {};
     if (typeof u.plinkoOwned !== 'boolean') u.plinkoOwned = false;
     if (typeof u.rtbOwned !== 'boolean') u.rtbOwned = false;
+    if (typeof u.dinoOwned !== 'boolean') u.dinoOwned = false;
     if (u.balance > MAX_BALANCE) u.balance = 20000;
     persist();
     enterApp(u);
@@ -1696,6 +2016,7 @@ if (!u.ownedAvatars) u.ownedAvatars = ['avatar_basic1'];
   ensureDailyQuests();
   renderDailyQuests();
   updateNav();
+  renderDinoMenuCard(u);
   showPage('menu-page');
   document.getElementById('welcome-name').textContent = u.username;
   document.getElementById('welcome-popup').classList.remove('hidden');
@@ -1731,10 +2052,120 @@ function updateNav() {
   }
 }   // ← A ZÁRÓ KAPCSOS IDE KERÜL
 
+function renderDinoMenuCard(u) {
+  const card = document.getElementById('dino-menu-card');
+  if (!card) return;
+  card.style.display = 'block';
+
+  if (u.dinoOwned) {
+    card.className = 'game-card';
+    card.onclick = () => showGame('dino');
+    card.innerHTML = `
+      <div class="game-icon">🦕</div>
+      <div class="game-name">Dínós Játék</div>
+      <div class="game-desc">Google Dino remake — ugrálj, hajolj, kerüld az akadályokat!</div>
+      <div class="game-tag">Prémium</div>
+      <div class="game-arrow">→</div>
+    `;
+    return;
+  }
+
+  card.className = 'game-card locked';
+  card.onclick = () => {
+    const current = curUser();
+    if (!current) return;
+    if (current.balance >= 5000000000) {
+      showDinoOfferModal();
+    } else {
+      showDinoBuyModal();
+    }
+  };
+
+  if (u.balance >= 5000000000) {
+    card.innerHTML = `
+      <div class="game-icon">🦕💰</div>
+      <div class="game-name">Dínós Játék</div>
+      <div class="game-desc">Már elérhető a vásárlás! Fizess 4.5 milliárd Ft-ot a játékhoz.</div>
+      <div class="game-tag">Megvásárolható</div>
+      <div class="game-arrow">→</div>
+    `;
+  } else {
+    card.innerHTML = `
+      <div class="game-icon">🦕🔒</div>
+      <div class="game-name">Dínós Játék</div>
+      <div class="game-desc">Google Dino remake — elérhető 5 milliárd Ft után.</div>
+      <div class="game-tag">Zárva</div>
+      <div class="game-arrow">→</div>
+    `;
+  }
+}
+
+function handleDinoCardClick() {
+  const u = curUser();
+  if (!u) return;
+
+  if (u.dinoOwned) {
+    showGame('dino');
+  } else if (u.balance >= 5000000000) {
+    showDinoOfferModal();
+  } else {
+    showDinoBuyModal();
+  }
+}
+
+function showDinoOfferModal() {
+  document.getElementById('dino-offer-modal').classList.remove('hidden');
+}
+
+function showDinoBuyModal() {
+  document.getElementById('dino-buy-modal').classList.remove('hidden');
+}
+
+function closeDinoOfferModal() {
+  document.getElementById('dino-offer-modal').classList.add('hidden');
+}
+
+function closeDinoBuyModal() {
+  document.getElementById('dino-buy-modal').classList.add('hidden');
+}
+
+function buyDinoGame() {
+  const u = curUser();
+  if (!u) {
+    showInfoModal('Hiba', 'Nincs bejelentkezett felhasználó!');
+    return;
+  }
+  if (u.balance < 4500000000) {
+    showInfoModal('Nincs elég pénz', `Szükséges: 4.5 milliárd Ft\nJelenlegi egyenleg: ${u.balance.toLocaleString('hu-HU')} Ft`);
+    closeDinoOfferModal();
+    closeDinoBuyModal();
+    return;
+  }
+  
+  // Vásárlás végrehajtása
+  u.balance -= 4500000000;
+  u.dinoOwned = true;
+  persist();
+  saveToCloud();
+  updateNav();
+  closeDinoOfferModal();
+  closeDinoBuyModal();
+  
+  // Csendesen frissítjük és megjelenítjük a menüt
+  renderDinoMenuCard(u);
+  showPage('menu-page');
+}
+
 
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const el = document.getElementById(id); if (el) el.classList.add('active');
+  if (id === 'menu-page') {
+    setTimeout(() => {
+      const u = curUser();
+      if (u) renderDinoMenuCard(u);
+    }, 300);
+  }
 }
 function showGame(g) {
   playClick();
@@ -1744,9 +2175,9 @@ function showGame(g) {
   if (g === 'plinko') {
     setTimeout(() => { initPlinkoCanvas(); renderPlinkoStatic(); refreshActiveBallDisplay(); }, 30);
   }
-  if (g === 'roulette') {
-    document.getElementById('roulette-landed').style.display = 'none';
-    document.getElementById('roulette-result').innerHTML = '';
+  if (g === 'crash') {
+    document.getElementById('crash-result').innerHTML = '';
+    initCrash();
   }
   if (g === 'hilo') {
     hiloReset();
@@ -1757,20 +2188,25 @@ function showGame(g) {
   if (g === 'rtb') {
     rtbEnterPage();
   }
+  if (g === 'dino') {
+    // Dino játék inicializálása már megtörtént a DOMContentLoaded-ben
+  }
 }
 function goHome() {
   playClick();
   gameToken++;
   resetAllRunningStates();
   showPage('menu-page');
+  const u = curUser();
+  if (u) renderDinoMenuCard(u);
 }
 function resetAllRunningStates() {
-  plinkoRunning = false; cfRunning = false; roulSpinning = false;
+  plinkoRunning = false; cfRunning = false; crashGameActive = false;
   kenoRunning = false; slotsSpinning = false; bjPhase = 'bet';
-  hiloPhase = 'idle';
+  hiloPhase = 'idle'; dinoRunning = false;
   pokerAbortIfRunning();
   rtbAbortIfRunning();
-  ['plinko-play-btn','cf-play-btn','roul-play-btn','keno-play-btn','slot-spin-btn','hilo-start-btn','bj-deal-btn','poker-start-btn','rtb-start-btn']
+  ['plinko-play-btn','cf-play-btn','crash-place-btn','keno-play-btn','slot-spin-btn','hilo-start-btn','bj-deal-btn','poker-start-btn','rtb-start-btn']
     .forEach(id => { const e = document.getElementById(id); if (e) e.disabled = false; });
   unlockAllBets();
 }
@@ -2065,6 +2501,31 @@ function closeRtbModal() {
   document.getElementById('rtb-buy-modal').classList.add('hidden');
 }
 
+function openCrashBuyModal() {
+  document.getElementById('crash-buy-modal').classList.remove('hidden');
+  playClick();
+}
+function closeCrashModal() {
+  document.getElementById('crash-buy-modal').classList.add('hidden');
+}
+function buyCrashGame() {
+  const u = curUser();
+  if (!u) return;
+  const COST = 1500000;
+  if (u.balance < COST) {
+    alert('Nincs elég egyenleged a Crash feloldásához! Szükséges: ' + COST.toLocaleString('hu-HU') + ' Ft');
+    return;
+  }
+  setBalance(u.balance - COST);
+  u.crashOwned = true;
+  persist();
+  playWin();
+  spawnConfetti(60);
+  closeCrashModal();
+  renderCrashAccess();
+  updateNav();
+}
+
 // =====================================================
 // LABDA BOLT / VÁLASZTÓ
 // =====================================================
@@ -2227,8 +2688,9 @@ function spawnConfetti(n=50) {
 // =====================================================
 // BET HELPERS
 // =====================================================
-function getBet(id) { return Math.max(100, parseInt((document.getElementById(id).value || '').replace(/\D/g,'')) || 100); }
-function setBetDisplay(id, val) { document.getElementById(id).value = Math.max(100, val).toLocaleString('hu-HU'); }
+function getMinBet() { return getBalance() < 500 ? 1 : 100; }
+function getBet(id) { return Math.max(getMinBet(), parseInt((document.getElementById(id).value || '').replace(/\D/g,'')) || getMinBet()); }
+function setBetDisplay(id, val) { document.getElementById(id).value = Math.max(getMinBet(), val).toLocaleString('hu-HU'); }
 function checkWin(amount) {
   // 1M+ -- nagy nyeremény → bónusz XP
   return amount >= 1000000;
@@ -2299,8 +2761,9 @@ function renderPlinkoStatic() {
   });
 }
 function pegForPath(r,c) { return plinkoPegs.find(p => p.r===r && p.c===c); }
-function plinkoAdj(d) { if (plinkoRunning) return; playClick(); plinkoBet = Math.max(100, Math.min(50000, getBet('plinko-bet')+d)); setBetDisplay('plinko-bet', plinkoBet); }
-function plinkoBetInput(el) { if (plinkoRunning) return; plinkoBet = Math.max(100, parseInt((el.value||'').replace(/\D/g,''))||100); }
+function plinkoAdj(d) { if (plinkoRunning) return; playClick(); plinkoBet = Math.max(getMinBet(), Math.min(50000, getBet('plinko-bet')+d)); setBetDisplay('plinko-bet', plinkoBet); }
+function plinkoBetInput(el) { if (plinkoRunning) return; plinkoBet = Math.max(getMinBet(), parseInt((el.value||'').replace(/\D/g,''))||getMinBet()); }
+function setAllIn(betId) { playClick(); const bal = getBalance(); setBetDisplay(betId, bal); const el = document.getElementById(betId); if (el) el.value = bal; }
 
 function plinkoPlay() {
   if (plinkoRunning) return;
@@ -2490,8 +2953,8 @@ function setMode(m) { if (cfRunning) return; playClick(); cfMode = m;
 }
 function selectCoin(s) { if (cfRunning) return; playClick(); cfCoinChoice=s; document.getElementById('btn-heads').classList.toggle('selected',s==='heads'); document.getElementById('btn-tails').classList.toggle('selected',s==='tails'); }
 function selectDice(n) { if (cfRunning) return; playClick(); cfDiceChoice=n; for(let i=1;i<=6;i++) document.getElementById('dnum-'+i).classList.toggle('selected',i===n); }
-function cfAdj(d) { if (cfRunning) return; playClick(); cfBet=Math.max(100,Math.min(50000,getBet('cf-bet')+d)); setBetDisplay('cf-bet',cfBet); }
-function cfBetInput(el) { if (cfRunning) return; cfBet=Math.max(100,parseInt((el.value||'').replace(/\D/g,''))||100); }
+function cfAdj(d) { if (cfRunning) return; playClick(); cfBet=Math.max(getMinBet(),Math.min(50000,getBet('cf-bet')+d)); setBetDisplay('cf-bet',cfBet); }
+function cfBetInput(el) { if (cfRunning) return; cfBet=Math.max(getMinBet(),parseInt((el.value||'').replace(/\D/g,''))||getMinBet()); }
 function cfPlay() {
   if (cfRunning) return;
   cfBet = getBet('cf-bet');
@@ -2581,8 +3044,8 @@ function renderBJHands() {
   const pt = handTotal(bjPlayer);
   document.getElementById('player-score').textContent = bjPhase==='bet' ? '' : `(${pt})${pt>21?' BUST!':pt===21?' 21!':''}`;
 }
-function bjAdj(d) { if (bjPhase!=='bet') return; playClick(); bjBetAmount = Math.max(100,Math.min(50000,getBet('bj-bet')+d)); setBetDisplay('bj-bet', bjBetAmount); }
-function bjBetInput(el) { if (bjPhase!=='bet') return; bjBetAmount = Math.max(100, parseInt((el.value||'').replace(/\D/g,''))||100); }
+function bjAdj(d) { if (bjPhase!=='bet') return; playClick(); bjBetAmount = Math.max(getMinBet(),Math.min(50000,getBet('bj-bet')+d)); setBetDisplay('bj-bet', bjBetAmount); }
+function bjBetInput(el) { if (bjPhase!=='bet') return; bjBetAmount = Math.max(getMinBet(), parseInt((el.value||'').replace(/\D/g,''))||getMinBet()); }
 function bjDeal() {
   bjBetAmount = getBet('bj-bet');
   if (bjBetAmount > getBalance()) { document.getElementById('bj-no-bal').style.display='block'; return; }
@@ -2661,165 +3124,1199 @@ function bjNewGame() {
 }
 
 // =====================================================
-// ROULETTE
+// CRASH GAME - TELJES JAVÍTOTT VÁLTOZAT
 // =====================================================
-const ROUL_NUMS=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-const RED_NUMS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
-let roulBet=100, roulBetType='red', roulBetNums=new Set(), roulSpinning=false;
-let roulCurrentAngle=0, roulCanvas=null, roulCtx=null;
-function initRoulette() {
-  roulCanvas = document.getElementById('roulette-canvas');
-  roulCtx = roulCanvas.getContext('2d');
-  roulCurrentAngle = 0; drawRouletteWheel(0); buildNumberGrid();
-  updateRouletteSelectionState();
-}
-function drawRouletteWheel(angle) {
-  if (!roulCtx) return;
-  const ctx = roulCtx, W = roulCanvas.width, cx = W/2, cy = W/2, R = cx - 4;
-  ctx.clearRect(0,0,W,W);
-  const n = ROUL_NUMS.length, seg = Math.PI*2/n;
-  ROUL_NUMS.forEach((num,i) => {
-    const sa = angle + i*seg, ea = sa + seg;
-    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,sa,ea); ctx.closePath();
-    ctx.fillStyle = num===0 ? '#166534' : RED_NUMS.has(num) ? '#b91c1a' : '#1a1a2e';
-    ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.15)'; ctx.lineWidth=1; ctx.stroke();
-    ctx.save(); ctx.translate(cx,cy); ctx.rotate(sa+seg/2); ctx.translate(R-20,0); ctx.rotate(Math.PI/2);
-    ctx.fillStyle='#fff'; ctx.font='bold 11px Arial'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText(String(num),0,0); ctx.restore();
-  });
-  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.strokeStyle='rgba(245,197,24,.5)'; ctx.lineWidth=3; ctx.stroke();
-  const cg = ctx.createRadialGradient(cx,cy,4,cx,cy,28); cg.addColorStop(0,'#2d2d3a'); cg.addColorStop(1,'#1a1a2e');
-  ctx.beginPath(); ctx.arc(cx,cy,28,0,Math.PI*2); ctx.fillStyle=cg; ctx.fill();
-  ctx.beginPath(); ctx.arc(cx,cy,28,0,Math.PI*2); ctx.strokeStyle='rgba(245,197,24,.5)'; ctx.lineWidth=2; ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(cx-10,2); ctx.lineTo(cx+10,2); ctx.lineTo(cx,22); ctx.closePath();
-  ctx.fillStyle='#f5c518'; ctx.fill();
-}
-function buildNumberGrid() {
-  const grid = document.getElementById('roulette-number-grid'); grid.innerHTML='';
-  for (let i=0;i<=36;i++) {
-    const btn = document.createElement('button'); btn.className='rnum-btn rb-sel';
-    btn.textContent = i; btn.style.background = i===0?'#166534':RED_NUMS.has(i)?'#b91c1a':'#1c1c2e';
-    btn.style.color='white'; btn.onclick = () => selectRNum(i,btn); grid.appendChild(btn);
+let crashBet = 100;
+let crashGameActive = false;
+let crashRoundActive = false;
+let crashStartTime = 0;
+let crashCrashPoint = 0;
+let crashCurrentMultiplier = 1;
+let crashCanvas = null;
+let crashCtx = null;
+let crashAnimationFrameId = null;
+let crashHistory = [];
+let crashBetPlaced = false;
+let crashCashedOut = false;
+let crashUserBalance = 0;
+let crashAutoCashout = 0;
+let crashBetAmount = 0;
+
+const CRASH_MIN_BET = 100;
+const CRASH_MAX_BET = Number.MAX_SAFE_INTEGER; // Nincs felső korlát (a felhasználó egyenlege szabja meg)
+
+// DINO GAME VARIABLES
+let dinoCanvas = null;
+let dinoCtx = null;
+let dinoGame = {};
+let dinoRunning = false;
+
+function generateCrashPoint() {
+  const roll = Math.random();
+  if (roll < 0.40) {
+    return 1.01 + Math.random() * 0.24; // 1.01 - 1.25
   }
-  updateRouletteSelectionState();
+  if (roll < 0.70) {
+    return 1.25 + Math.random() * 0.35; // 1.25 - 1.60
+  }
+  if (roll < 0.85) {
+    return 1.60 + Math.random() * 0.40; // 1.60 - 2.00
+  }
+  if (roll < 0.92) {
+    return 2.00 + Math.random() * 0.40; // 2.00 - 2.40
+  }
+  if (roll < 0.97) {
+    return 2.40 + Math.random() * 1.10; // 2.40 - 3.50
+  }
+  if (roll < 0.99) {
+    return 3.50 + Math.random() * 2.00; // 3.50 - 5.50
+  }
+  return 5.50 + Math.random() * 20.00; // ritka nagy nyeremények
 }
-function updateRouletteSelectionState() {
-  const numberMode = roulBetType === 'number';
-  const selectedCount = roulBetNums.size;
-  document.querySelectorAll('.rbet-btn').forEach(btn => {
-    const type = btn.id.replace('rbet-','');
-    btn.classList.toggle('selected', !numberMode && type === roulBetType);
-    const active = !numberMode;
-    btn.disabled = !active || roulSpinning;
-    btn.classList.toggle('locked', !active);
-  });
-  document.querySelectorAll('.rnum-btn').forEach(btn => {
-    const n = parseInt(btn.textContent, 10);
-    const selected = roulBetNums.has(n);
-    btn.classList.toggle('selected', selected);
-    const active = numberMode && (selected || selectedCount < 3);
-    btn.disabled = !active || roulSpinning;
-    btn.classList.toggle('locked', !active);
-  });
-  const info = document.getElementById('roulette-num-info');
-  if (info) info.textContent = 'Kiválasztott számok: ' + selectedCount + '/3';
+
+function initCrash() {
+  crashCanvas = document.getElementById('crash-canvas');
+  if (!crashCanvas) return;
+  crashCanvas.width = crashCanvas.offsetWidth;
+  crashCanvas.height = 300;
+  crashCtx = crashCanvas.getContext('2d');
+  if (!crashCtx) return;
+
+  updateCrashBalance();
+  drawCrashEmpty();
+  crashHistory = [];
+  updateCrashHistory();
+  renderCrashAccess();
+  resetCrashButtons();
+  setupCrashInputValidation();
 }
-function selectRBet(type) { if (roulSpinning) return; if (roulBetNums.size > 0) return; playClick();
-  if (roulBetType === type) {
-    roulBetType = 'number';
+
+// ── Input validáció beállítása ──────────────────────
+function setupCrashInputValidation() {
+  const betInput = document.getElementById('crash-bet-amount');
+  const autoInput = document.getElementById('crash-auto-cashout');
+
+  if (betInput) {
+      const dynamicCrashMin = () => getMinBet();
+      // Csak számokat enged beírni
+      betInput.addEventListener('input', function () {
+        // Nem szám karakterek eltávolítása
+        let val = this.value.replace(/[^0-9]/g, '');
+        // Vezető nullák eltávolítása
+        val = val.replace(/^0+/, '') || '0';
+        // Szám parse és limit
+        let num = parseInt(val) || dynamicCrashMin();
+        num = Math.max(dynamicCrashMin(), num);
+        this.value = num;
+        crashBet = num;
+      });
+
+      betInput.addEventListener('blur', function () {
+        let num = parseInt(this.value.replace(/[^0-9]/g, '')) || dynamicCrashMin();
+        num = Math.max(dynamicCrashMin(), num);
+        this.value = num;
+        crashBet = num;
+      });
+
+      // Paste esemény kezelése
+      betInput.addEventListener('paste', function (e) {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData).getData('text');
+        let num = parseInt(pasted.replace(/[^0-9]/g, '')) || dynamicCrashMin();
+        num = Math.max(dynamicCrashMin(), num);
+        this.value = num;
+        crashBet = num;
+      });
+
+      // Nagyobb számok is elfogadhatók
+      betInput.setAttribute('maxlength', '15');
+      betInput.setAttribute('type', 'number');
+      betInput.setAttribute('min', getMinBet());
+  }
+
+  if (autoInput) {
+    autoInput.addEventListener('input', function () {
+      let val = this.value.replace(/[^0-9.]/g, '');
+      // Csak egy tizedes pont
+      const parts = val.split('.');
+      if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+      // Max 2 tizedesjegy
+      if (parts[1] && parts[1].length > 2) val = parts[0] + '.' + parts[1].slice(0, 2);
+      // Max érték
+      if (parseFloat(val) > 100) val = '100';
+      this.value = val;
+    });
+  }
+}
+
+function lockCrashInputs() {
+  const betInput = document.getElementById('crash-bet-amount');
+  const autoInput = document.getElementById('crash-auto-cashout');
+  const adjBtns = document.querySelectorAll('.crash-bet-btn');
+
+  if (betInput) {
+    betInput.disabled = true;
+    betInput.style.opacity = '0.5';
+    betInput.style.cursor = 'not-allowed';
+  }
+  if (autoInput) {
+    autoInput.disabled = true;
+    autoInput.style.opacity = '0.5';
+    autoInput.style.cursor = 'not-allowed';
+  }
+  adjBtns.forEach(btn => {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+  });
+}
+
+function unlockCrashInputs() {
+  const betInput = document.getElementById('crash-bet-amount');
+  const autoInput = document.getElementById('crash-auto-cashout');
+  const adjBtns = document.querySelectorAll('.crash-bet-btn');
+
+  if (betInput) {
+    betInput.disabled = false;
+    betInput.style.opacity = '';
+    betInput.style.cursor = '';
+  }
+  if (autoInput) {
+    autoInput.disabled = false;
+    autoInput.style.opacity = '';
+    autoInput.style.cursor = '';
+  }
+  adjBtns.forEach(btn => {
+    btn.disabled = false;
+    btn.style.opacity = '';
+  });
+}
+
+function resetCrashButtons() {
+  const placeBtn = document.getElementById('crash-place-btn');
+  const cashoutBtn = document.getElementById('crash-cashout-btn');
+  if (placeBtn) placeBtn.disabled = false;
+  if (cashoutBtn) cashoutBtn.disabled = true;
+  unlockCrashInputs();
+}
+
+function drawCrashEmpty() {
+  if (!crashCtx || !crashCanvas) return;
+  const w = crashCanvas.width, h = crashCanvas.height;
+  crashCtx.fillStyle = '#0a0e1a';
+  crashCtx.fillRect(0, 0, w, h);
+  crashCtx.strokeStyle = 'rgba(245,197,24,.2)';
+  crashCtx.lineWidth = 1;
+  crashCtx.strokeRect(0, 0, w, h);
+  crashCtx.fillStyle = 'rgba(245,197,24,.15)';
+  crashCtx.font = '16px Inter, sans-serif';
+  crashCtx.textAlign = 'center';
+  crashCtx.textBaseline = 'middle';
+  crashCtx.fillText('Helyezz tétet az induláshoz!', w / 2, h / 2);
+}
+
+function renderCrashAccess() {
+  const u = curUser();
+  const placeBtn = document.getElementById('crash-place-btn');
+  const buyBtn = document.getElementById('crash-buy-btn');
+  const accessHint = document.getElementById('crash-access-hint');
+  if (!u || !u.crashOwned) {
+    if (placeBtn) placeBtn.style.display = 'none';
+    if (buyBtn) buyBtn.style.display = 'block';
+    if (accessHint) accessHint.style.display = 'block';
   } else {
-    roulBetType = type;
-    roulBetNums.clear();
+    if (placeBtn) placeBtn.style.display = 'block';
+    if (buyBtn) buyBtn.style.display = 'none';
+    if (accessHint) accessHint.style.display = 'none';
   }
-  updateRouletteSelectionState();
 }
-function selectRNum(n, btn) { if (roulSpinning) return; playClick();
-  if (roulBetType !== 'number' && roulBetNums.size === 0) {
-    roulBetType = 'number';
+
+function initDino() {
+  dinoCanvas = document.getElementById('dino-canvas');
+  if (!dinoCanvas) return;
+  dinoCtx = dinoCanvas.getContext('2d');
+  if (!dinoCtx) return;
+
+  // Dino játék változók inicializálása
+  dinoGame = {
+    running: false,
+    paused: false,
+    score: 0,
+    highScore: parseInt(localStorage.getItem('dinoHighScore') || '0'),
+    speed: 7,
+    gravity: 0.7,
+    jumpPower: -15,
+    groundY: dinoCanvas.height - 30,
+    obstacleSpawnRate: 0.008,
+    obstacleSpawnCounter: 0,
+    lastObstacleFrame: -200, // Frame amikor az utolsó akadály spawolt
+    dino: {
+      x: 50,
+      y: dinoCanvas.height - 70,
+      width: 40,
+      height: 50,
+      velocityY: 0,
+      onGround: true,
+      ducking: false,
+      bodyWidth: 35,
+      bodyHeight: 35,
+      headRadius: 12
+    },
+    obstacles: [],
+    clouds: [],
+    gameFrame: 0,
+    baseSpeed: 7,
+    speedIncrementFrame: 500 // Sebesség növelés 500 frame-ként (gyorsabb gyorsulás)
+  };
+
+  updateDinoDisplay();
+  drawDinoGame();
+
+  // Billentyűzet eseménykezelők
+  document.addEventListener('keydown', handleDinoKey);
+  document.addEventListener('keyup', handleDinoKeyUp);
+}
+
+function handleDinoKey(e) {
+  // Game Over után: Space = újrakezdés
+  if (dinoGameOverActive && (e.code === 'Space' || e.code === 'ArrowUp')) {
+    e.preventDefault();
+    dinoGameOverActive = false;
+    startDinoGame();
+    return;
   }
-  if (roulBetType !== 'number') return;
-  if (roulBetNums.has(n)) {
-    roulBetNums.delete(n);
-    if (roulBetNums.size === 0) {
-      roulBetType = 'red';
+
+  if (!dinoGame.running) return;
+
+  if (e.code === 'Space' || e.code === 'ArrowUp') {
+    e.preventDefault();
+    if (dinoGame.dino.onGround && !dinoGame.dino.ducking) {
+      dinoGame.dino.velocityY = dinoGame.jumpPower;
+      dinoGame.dino.onGround = false;
     }
-  } else if (roulBetNums.size < 3) {
-    roulBetNums.add(n);
-    roulBetType = 'number';
+  } else if (e.code === 'ArrowDown') {
+    e.preventDefault();
+    dinoGame.dino.ducking = true;
+    dinoGame.dino.width = 45;
+    dinoGame.dino.height = 30;
   }
-  updateRouletteSelectionState();
 }
-function roulAdj(d) { if (roulSpinning) return; playClick(); roulBet=Math.max(100,Math.min(50000,getBet('roul-bet')+d)); setBetDisplay('roul-bet',roulBet); }
-function roulBetInput(el) { if (roulSpinning) return; roulBet = Math.max(100, parseInt((el.value||'').replace(/\D/g,''))||100); }
-function roulPlay() {
-  if (roulSpinning) return;
-  roulBet = getBet('roul-bet');
-  const totalCost = roulBetType === 'number' ? roulBet * roulBetNums.size : roulBet;
-  if (roulBetType === 'number' && roulBetNums.size === 0) return;
-  if (totalCost > getBalance()) { document.getElementById('roul-no-bal').style.display='block'; return; }
-  document.getElementById('roul-no-bal').style.display='none';
-  document.getElementById('roulette-result').innerHTML='';
-  document.getElementById('roulette-landed').style.display='none';
-  document.getElementById('roul-play-btn').disabled = true;
-  roulSpinning = true;
-  lockBets('rl-bet'); lockBets('rb-sel');
-  setBalance(getBalance() - totalCost);
-  try { dailyTrack('play_roulette', 1); } catch (e) {}
-  gameOpenedXp();
-  const tok = getTok();
-  const outcome = ROUL_NUMS[Math.floor(Math.random()*ROUL_NUMS.length)];
-  const outcomeIdx = ROUL_NUMS.indexOf(outcome);
-  const seg = Math.PI*2/ROUL_NUMS.length;
-  const TWO_PI = Math.PI*2;
-  let targetRaw = -Math.PI/2 - outcomeIdx*seg - seg/2;
-  targetRaw = ((targetRaw % TWO_PI) + TWO_PI) % TWO_PI;
-  const minTarget = roulCurrentAngle + 8*TWO_PI;
-  let targetAngle = targetRaw + Math.ceil((minTarget - targetRaw)/TWO_PI) * TWO_PI;
-  const startAngle = roulCurrentAngle;
-  const duration = 5000;
-  const startTime = performance.now();
-  let soundInt = setInterval(() => playPling(), 200);
-  function animRoulette(now) {
-    if (isAborted(tok)) { clearInterval(soundInt); return; }
-    const elapsed = now - startTime;
-    const prog = Math.min(elapsed/duration, 1);
-    const eased = 1 - Math.pow(1-prog, 4);
-    const cur = startAngle + (targetAngle - startAngle)*eased;
-    drawRouletteWheel(cur);
-    if (prog < 1) requestAnimationFrame(animRoulette);
-    else {
-      clearInterval(soundInt); roulCurrentAngle = targetAngle; drawRouletteWheel(targetAngle);
-      let win=0, mult=0, betLabel='';
-      if (roulBetType === 'number') {
-        const numbers = Array.from(roulBetNums).join(', ');
-        const hit = Array.from(roulBetNums).includes(outcome);
-        betLabel = 'Számok: ' + numbers;
-        mult = hit ? 36 : 0;
-        win = hit ? Math.round(roulBet * 36) : 0;
+
+function handleDinoKeyUp(e) {
+  if (e.code === 'ArrowDown') {
+    dinoGame.dino.ducking = false;
+    dinoGame.dino.width = 40;
+    dinoGame.dino.height = 50;
+  }
+}
+
+function startDinoGame() {
+  if (dinoGame.running) return;
+  dinoGame.running = true;
+  dinoRunning = true;
+  dinoGame.paused = false;
+  dinoGame.score = 0;
+  dinoGame.speed = dinoGame.baseSpeed;
+  dinoGame.gameFrame = 0;
+  dinoGame.obstacleSpawnCounter = 0;
+  dinoGame.lastObstacleFrame = -200; // Reszetalás — ne jöjjön akadály a legelején
+  dinoGame.dino.x = 50;
+  dinoGame.dino.y = dinoCanvas.height - 70;
+  dinoGame.dino.velocityY = 0;
+  dinoGame.dino.onGround = true;
+  dinoGame.dino.ducking = false;
+  dinoGame.dino.width = 40;
+  dinoGame.dino.height = 50;
+  dinoGame.obstacles = [];
+  dinoGame.clouds = [];
+  updateDinoDisplay();
+  dinoGameLoop();
+}
+
+function pauseDinoGame() {
+  // Ez a függvény már nem szükséges — eltávolítva
+}
+
+// Game Over állapot követése
+let dinoGameOverActive = false;
+
+function resetDinoGame() {
+  // Ez a függvény már nem szükséges — eltávolítva
+  // A Space gombbal lehet újrakezdeni játék vége után
+}
+
+function updateDinoDisplay() {
+  document.getElementById('dino-score').textContent = dinoGame.score;
+  document.getElementById('dino-highscore').textContent = dinoGame.highScore;
+  document.getElementById('dino-speed').textContent = dinoGame.speed;
+}
+
+function dinoGameLoop() {
+  if (!dinoGame.running || dinoGame.paused) return;
+
+  updateDinoGame();
+  drawDinoGame();
+
+  if (checkDinoCollision()) {
+    gameOverDino();
+    return;
+  }
+
+  requestAnimationFrame(dinoGameLoop);
+}
+
+function updateDinoGame() {
+  // Dino fizika
+  dinoGame.dino.velocityY += dinoGame.gravity;
+  dinoGame.dino.y += dinoGame.dino.velocityY;
+
+  if (dinoGame.dino.y >= dinoGame.groundY - dinoGame.dino.height) {
+    dinoGame.dino.y = dinoGame.groundY - dinoGame.dino.height;
+    dinoGame.dino.velocityY = 0;
+    dinoGame.dino.onGround = true;
+  }
+
+  // Akadályok spawn-olása — FRAME-ALAPÚ, RANDOMIZÁLT
+  // Minimum 60-80 frame kell az akadályok között (1-1.3 másodperc)
+  const framesSinceLastObstacle = dinoGame.gameFrame - dinoGame.lastObstacleFrame;
+  const minFramesBetween = Math.max(60, 85 - Math.floor(dinoGame.speed)); // Gyorsabb = közelebb, de min 60 frame
+  
+  if (framesSinceLastObstacle > minFramesBetween && Math.random() < 0.15) {
+    // Random spawn idő — ne legyen túl megjósolható
+    const randomDelay = Math.floor(Math.random() * 30); // 0-30 frame random késleltetés
+    if (framesSinceLastObstacle > minFramesBetween + randomDelay) {
+      
+      // RANDOM akadály típus — több variáció!
+      const rand = Math.random();
+      dinoGame.lastObstacleFrame = dinoGame.gameFrame;
+      
+      if (rand < 0.60) {
+        // Egy kaktusz (60%)
+        dinoGame.obstacles.push({
+          x: dinoCanvas.width,
+          y: dinoGame.groundY - 45,
+          width: 25,
+          height: 45,
+          type: 'cactus',
+          variant: 'single'
+        });
+      } else if (rand < 0.75) {
+        // Dupla kaktusz közel egymás mellett (15%)
+        dinoGame.obstacles.push({
+          x: dinoCanvas.width,
+          y: dinoGame.groundY - 45,
+          width: 25,
+          height: 45,
+          type: 'cactus',
+          variant: 'single'
+        });
+        dinoGame.obstacles.push({
+          x: dinoCanvas.width + 35,
+          y: dinoGame.groundY - 45,
+          width: 25,
+          height: 45,
+          type: 'cactus',
+          variant: 'single'
+        });
+      } else if (rand < 0.90) {
+        // Madár magasan (15%)
+        const randomBirdHeight = 135 + Math.floor(Math.random() * 35); // 135-170 random
+        dinoGame.obstacles.push({
+          x: dinoCanvas.width,
+          y: dinoGame.groundY - randomBirdHeight,
+          width: 45,
+          height: 30,
+          type: 'bird',
+          wingPhase: 0
+        });
       } else {
-        const checks = {red:n=>n!==0&&RED_NUMS.has(n),black:n=>n!==0&&!RED_NUMS.has(n),even:n=>n!==0&&n%2===0,odd:n=>n!==0&&n%2===1,low:n=>n>=1&&n<=18,high:n=>n>=19&&n<=36,d1:n=>n>=1&&n<=12,d2:n=>n>=13&&n<=24,d3:n=>n>=25&&n<=36};
-        const mults = {red:2,black:2,even:2,odd:2,low:2,high:2,d1:3,d2:3,d3:3};
-        const labels = {red:'Piros',black:'Fekete',even:'Páros',odd:'Páratlan',low:'1-18',high:'19-36',d1:'1-12',d2:'13-24',d3:'25-36'};
-        const hit = checks[roulBetType] && checks[roulBetType](outcome);
-        mult = hit ? mults[roulBetType] : 0; betLabel = labels[roulBetType];
-        win = hit ? Math.round(roulBet * mults[roulBetType]) : 0;
+        // Madár alacsonyabban (10%) — de nem a kaktusz szintjén
+        const randomBirdHeight = 110 + Math.floor(Math.random() * 20); // 110-130
+        dinoGame.obstacles.push({
+          x: dinoCanvas.width,
+          y: dinoGame.groundY - randomBirdHeight,
+          width: 45,
+          height: 30,
+          type: 'bird',
+          wingPhase: 0
+        });
       }
-      setBalance(getBalance() + win);
-      if (win > 0) gameWonXp(checkWin(win), win);
-      const numColor = outcome===0?'#22c55e':RED_NUMS.has(outcome)?'#ef4444':'#94a3b8';
-      const landed = document.getElementById('roulette-landed');
-      landed.style.display = 'block';
-      landed.innerHTML = `<div class="roulette-result-number" style="background:${numColor}">${outcome}</div><div style="color:var(--text2);font-size:.85rem">Nyerő szám a kereken</div>`;
-      document.getElementById('roulette-result').innerHTML = win > 0
-        ? `<div class="result-win"><div class="result-title">🎉 Nyertél! (${mult}x)</div><div class="result-amount">${betLabel} — Szám: ${outcome} — +${win.toLocaleString('hu-HU')} Ft</div></div>`
-        : `<div class="result-lose"><div class="result-title">😔 Sajnos nem nyertél</div><div class="result-amount">A nyerő szám: ${outcome} | ${betLabel} nem volt találat.</div></div>`;
-      if (win > 0) { if (mult >= 35) playBigWin(); else playWin(); spawnConfetti(mult>=35?60:25); } else playLose();
-      roulSpinning = false; document.getElementById('roul-play-btn').disabled = false;
-      unlockBets('rl-bet'); unlockBets('rb-sel');
     }
   }
-  requestAnimationFrame(animRoulette);
+
+  // Akadályok mozgása
+  dinoGame.obstacles.forEach(obstacle => {
+    obstacle.x -= dinoGame.speed;
+    if (obstacle.type === 'bird') {
+      obstacle.wingPhase += 0.2;
+    }
+  });
+
+  // Akadályok eltávolítása
+  dinoGame.obstacles = dinoGame.obstacles.filter(obstacle => obstacle.x > -50);
+
+  // Felhők — lassan mozognak
+  if (Math.random() < 0.005) {
+    dinoGame.clouds.push({
+      x: dinoCanvas.width,
+      y: 30 + Math.random() * 60,
+      width: 60 + Math.random() * 40,
+      height: 30 + Math.random() * 20
+    });
+  }
+
+  dinoGame.clouds.forEach(cloud => {
+    cloud.x -= 1; // Felhők lassan mozognak (másfélszer lassúbb mint az akadályok)
+  });
+
+  dinoGame.clouds = dinoGame.clouds.filter(cloud => cloud.x > -(cloud.width || 50));
+
+  // Frame-alapú pontszámítás (nem másodpercenként)
+  dinoGame.gameFrame++;
+  dinoGame.score = Math.floor(dinoGame.gameFrame / 8); // 1 pont minden 8 frame-ként (60 fps-en ~7.5 fps pont)
+
+  // Sebesség növelése (500 frame = ~8 másodperc, majd egyre gyorsul)
+  if (dinoGame.gameFrame % dinoGame.speedIncrementFrame === 0) {
+    dinoGame.speed = Math.min(dinoGame.baseSpeed + (dinoGame.gameFrame / dinoGame.speedIncrementFrame) * 0.30, 14);
+  }
+
+  updateDinoDisplay();
 }
+
+function drawDinoGame() {
+  if (!dinoCtx || !dinoCanvas) return;
+
+  const w = dinoCanvas.width, h = dinoCanvas.height;
+
+  // ═══════════════════════════════════════════════════════════════
+  // HÁTTÉR: Világos nappali ég
+  // ═══════════════════════════════════════════════════════════════
+  const gradient = dinoCtx.createLinearGradient(0, 0, 0, h * 0.7);
+  gradient.addColorStop(0, '#87CEEB');     // Égkék felső rész
+  gradient.addColorStop(1, '#E0F6FF');     // Világosabb alsó rész
+  dinoCtx.fillStyle = gradient;
+  dinoCtx.fillRect(0, 0, w, h);
+
+  // Nap felületi ír
+  dinoCtx.fillStyle = 'rgba(255, 200, 100, 0.8)';
+  dinoCtx.beginPath();
+  dinoCtx.arc(w - 80, 60, 40, 0, Math.PI * 2);
+  dinoCtx.fill();
+
+  // ═══════════════════════════════════════════════════════════════
+  // FELHŐK — szebb megjelenítés
+  // ═══════════════════════════════════════════════════════════════
+  dinoCtx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  dinoGame.clouds.forEach(cloud => {
+    // Cloud shape — 3 kör kombináció
+    dinoCtx.beginPath();
+    dinoCtx.arc(cloud.x, cloud.y, cloud.height * 0.6, 0, Math.PI * 2);
+    dinoCtx.fill();
+    
+    dinoCtx.beginPath();
+    dinoCtx.arc(cloud.x + cloud.width * 0.35, cloud.y - 5, cloud.height * 0.55, 0, Math.PI * 2);
+    dinoCtx.fill();
+    
+    dinoCtx.beginPath();
+    dinoCtx.arc(cloud.x + cloud.width * 0.7, cloud.y, cloud.height * 0.5, 0, Math.PI * 2);
+    dinoCtx.fill();
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  // FÖLD
+  // ═══════════════════════════════════════════════════════════════
+  dinoCtx.fillStyle = '#8B7355';
+  dinoCtx.fillRect(0, dinoGame.groundY, w, h - dinoGame.groundY);
+  
+  // Föld határvonala (sötétebb csík)
+  dinoCtx.fillStyle = '#6B5344';
+  dinoCtx.fillRect(0, dinoGame.groundY, w, 4);
+
+  // ═══════════════════════════════════════════════════════════════
+  // DÍNÓ — DINOSZAURUSZ MEGJELENÍTÉS
+  // ═══════════════════════════════════════════════════════════════
+  const dx = dinoGame.dino.x;
+  const dy = dinoGame.dino.y;
+
+  // Dinó test — zöld, erősebb, dinoszauruszabb forma
+  dinoCtx.fillStyle = '#4A8F3A';
+  if (dinoGame.dino.ducking) {
+    dinoCtx.beginPath();
+    dinoCtx.ellipse(dx + 20, dy + 28, 22, 14, 0.3, 0, Math.PI * 2);
+    dinoCtx.fill();
+  } else {
+    dinoCtx.beginPath();
+    dinoCtx.ellipse(dx + 24, dy + 26, 24, 20, 0.15, 0, Math.PI * 2);
+    dinoCtx.fill();
+  }
+
+  // Dinó hasa
+  dinoCtx.fillStyle = '#3F7F2D';
+  dinoCtx.beginPath();
+  dinoCtx.ellipse(dx + (dinoGame.dino.ducking ? 20 : 24), dy + 32, 16, 10, 0.15, 0, Math.PI * 2);
+  dinoCtx.fill();
+
+  // Hát tüskék / púpok
+  if (!dinoGame.dino.ducking) {
+    dinoCtx.fillStyle = '#76C26F';
+    for (let i = 0; i < 4; i++) {
+      const sx = dx + 8 + i * 8;
+      const sy = dy + 8 + (i % 2 ? -2 : 0);
+      dinoCtx.beginPath();
+      dinoCtx.moveTo(sx, sy);
+      dinoCtx.lineTo(sx + 6, sy - 10);
+      dinoCtx.lineTo(sx + 12, sy);
+      dinoCtx.closePath();
+      dinoCtx.fill();
+    }
+  }
+
+  // Dinó nyak — dinoszauruszabb kontúr
+  dinoCtx.fillStyle = '#3A7F2A';
+  dinoCtx.beginPath();
+  dinoCtx.moveTo(dx + 28, dy + 12);
+  dinoCtx.quadraticCurveTo(dx + 36, dy - 4, dx + 50, dy + 10);
+  dinoCtx.lineTo(dx + 50, dy + 20);
+  dinoCtx.quadraticCurveTo(dx + 38, dy + 18, dx + 28, dy + 12);
+  dinoCtx.fill();
+
+  // Dinó feje — nagyobb, erősebb
+  dinoCtx.fillStyle = '#2A7F1A';
+  dinoCtx.beginPath();
+  if (dinoGame.dino.ducking) {
+    dinoCtx.arc(dx + 28, dy + 24, 9, 0, Math.PI * 2);
+  } else {
+    dinoCtx.arc(dx + 33, dy + 5, 11, 0, Math.PI * 2);
+  }
+  dinoCtx.fill();
+
+  // Dinó SZARU — karakterisztikus
+  if (!dinoGame.dino.ducking) {
+    dinoCtx.fillStyle = '#8B7355';
+    dinoCtx.beginPath();
+    dinoCtx.moveTo(dx + 35, dy + 0);
+    dinoCtx.lineTo(dx + 38, dy - 5);
+    dinoCtx.lineTo(dx + 36, dy + 2);
+    dinoCtx.fill();
+    
+    // Másik szaru
+    dinoCtx.beginPath();
+    dinoCtx.moveTo(dx + 40, dy + 1);
+    dinoCtx.lineTo(dx + 44, dy - 3);
+    dinoCtx.lineTo(dx + 42, dy + 3);
+    dinoCtx.fill();
+  }
+
+  // Dinó szem — nagy, expresszív
+  if (!dinoGame.dino.ducking) {
+    dinoCtx.fillStyle = 'white';
+    dinoCtx.beginPath();
+    dinoCtx.arc(dx + 40, dy + 2, 4, 0, Math.PI * 2);
+    dinoCtx.fill();
+    
+    dinoCtx.fillStyle = '#1A1A1A';
+    dinoCtx.beginPath();
+    dinoCtx.arc(dx + 41, dy + 2, 2.5, 0, Math.PI * 2);
+    dinoCtx.fill();
+  } else {
+    // Lehajolás közben: félszemű
+    dinoCtx.fillStyle = 'white';
+    dinoCtx.beginPath();
+    dinoCtx.arc(dx + 26, dy + 20, 3, 0, Math.PI * 2);
+    dinoCtx.fill();
+  }
+
+  // Dinó lábai — erős, nagy, animált
+  dinoCtx.fillStyle = '#2A6F1A';
+  if (!dinoGame.dino.ducking) {
+    // Lábak animáció (futás illúzió)
+    const legOffset1 = Math.sin(dinoGame.gameFrame * 0.15) * 6;
+    const legOffset2 = Math.sin(dinoGame.gameFrame * 0.15 + Math.PI) * 6;
+    
+    // Bal láb — vastagabb
+    dinoCtx.fillRect(dx + 10, dy + 42, 5, 12 + legOffset1);
+    // Jobb láb — vastagabb
+    dinoCtx.fillRect(dx + 22, dy + 42, 5, 12 + legOffset2);
+  }
+
+  // Dinó farok — hosszú és dinamikus
+  if (!dinoGame.dino.ducking) {
+    dinoCtx.fillStyle = '#2A6F1A';
+    const tailCurve = Math.sin(dinoGame.gameFrame * 0.1) * 3;
+    dinoCtx.beginPath();
+    dinoCtx.moveTo(dx + 8, dy + 22);
+    dinoCtx.quadraticCurveTo(dx - 12, dy + 20 + tailCurve, dx - 18, dy + 24);
+    dinoCtx.lineTo(dx - 15, dy + 28);
+    dinoCtx.quadraticCurveTo(dx - 10, dy + 28, dx + 8, dy + 34);
+    dinoCtx.closePath();
+    dinoCtx.fill();
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // AKADÁLYOK
+  // ═══════════════════════════════════════════════════════════════
+  dinoGame.obstacles.forEach(obstacle => {
+    if (obstacle.type === 'cactus') {
+      // KAKTUSZ — Nagyobb, karakterisztikus saguaro stílus
+      dinoCtx.fillStyle = '#1a8f1a';
+      
+      // Kaktusz fő test — vastagabb, görbültebb
+      dinoCtx.beginPath();
+      dinoCtx.ellipse(obstacle.x + 12.5, obstacle.y + 22, 7, 22, 0.05, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Kaktusz felső pont — éles csúcs
+      dinoCtx.fillStyle = '#0d6b0d';
+      dinoCtx.beginPath();
+      dinoCtx.moveTo(obstacle.x + 12.5, obstacle.y - 3);
+      dinoCtx.lineTo(obstacle.x + 10, obstacle.y + 3);
+      dinoCtx.lineTo(obstacle.x + 15, obstacle.y + 3);
+      dinoCtx.fill();
+      
+      // Kaktusz tüskék — bal oldali felső ág
+      dinoCtx.fillStyle = '#1a8f1a';
+      dinoCtx.beginPath();
+      dinoCtx.ellipse(obstacle.x - 3, obstacle.y + 8, 5, 3, -0.4, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Kaktusz tüskék — bal oldali alsó ág
+      dinoCtx.beginPath();
+      dinoCtx.ellipse(obstacle.x - 2, obstacle.y + 20, 5, 3, -0.3, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Kaktusz tüskék — jobb oldali felső ág
+      dinoCtx.beginPath();
+      dinoCtx.ellipse(obstacle.x + 27, obstacle.y + 10, 5, 3, 0.4, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Kaktusz tüskék — jobb oldali közép ág
+      dinoCtx.beginPath();
+      dinoCtx.ellipse(obstacle.x + 28, obstacle.y + 22, 5, 3, 0.5, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Kaktusz tüskék — jobb oldali alsó ág
+      dinoCtx.beginPath();
+      dinoCtx.ellipse(obstacle.x + 26, obstacle.y + 34, 5, 3, 0.4, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Szöget a kaktusznak — pixelek az oldalán
+      dinoCtx.fillStyle = '#0d6b0d';
+      for (let i = 0; i < 5; i++) {
+        dinoCtx.fillRect(obstacle.x + 8, obstacle.y + 8 + i * 6, 2, 2);
+        dinoCtx.fillRect(obstacle.x + 17, obstacle.y + 8 + i * 6, 2, 2);
+      }
+      
+    } else if (obstacle.type === 'bird') {
+      // MADÁR — szebb megjelenítés
+      dinoCtx.fillStyle = '#8B4513';
+      
+      // Madár test — bezier görbék (kompatibilis)
+      dinoCtx.beginPath();
+      dinoCtx.moveTo(obstacle.x + 3, obstacle.y + 12);
+      dinoCtx.quadraticCurveTo(obstacle.x + 3, obstacle.y + 4, obstacle.x + 15, obstacle.y + 4);
+      dinoCtx.quadraticCurveTo(obstacle.x + 27, obstacle.y + 4, obstacle.x + 27, obstacle.y + 12);
+      dinoCtx.quadraticCurveTo(obstacle.x + 27, obstacle.y + 20, obstacle.x + 15, obstacle.y + 20);
+      dinoCtx.quadraticCurveTo(obstacle.x + 3, obstacle.y + 20, obstacle.x + 3, obstacle.y + 12);
+      dinoCtx.fill();
+      
+      // Madár feje
+      dinoCtx.beginPath();
+      dinoCtx.arc(obstacle.x + 28, obstacle.y + 10, 7, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Madár szem
+      dinoCtx.fillStyle = 'yellow';
+      dinoCtx.beginPath();
+      dinoCtx.arc(obstacle.x + 32, obstacle.y + 8, 2.5, 0, Math.PI * 2);
+      dinoCtx.fill();
+      
+      // Madár csőr
+      dinoCtx.fillStyle = '#8B4513';
+      dinoCtx.fillRect(obstacle.x + 34, obstacle.y + 9, 6, 2);
+      
+      // Madár szárnyak — animáció
+      const wingOffset = Math.sin(obstacle.wingPhase) * 4;
+      dinoCtx.fillStyle = '#654321';
+      // Bal szárny
+      dinoCtx.beginPath();
+      dinoCtx.moveTo(obstacle.x + 15, obstacle.y + 12);
+      dinoCtx.lineTo(obstacle.x + 5, obstacle.y + 12 - wingOffset);
+      dinoCtx.lineTo(obstacle.x + 8, obstacle.y + 18 + wingOffset);
+      dinoCtx.fill();
+      
+      // Jobb szárny
+      dinoCtx.beginPath();
+      dinoCtx.moveTo(obstacle.x + 25, obstacle.y + 12);
+      dinoCtx.lineTo(obstacle.x + 35, obstacle.y + 12 - wingOffset);
+      dinoCtx.lineTo(obstacle.x + 32, obstacle.y + 18 + wingOffset);
+      dinoCtx.fill();
+      
+      // Madár farka
+      dinoCtx.fillStyle = '#8B4513';
+      dinoCtx.beginPath();
+      dinoCtx.moveTo(obstacle.x + 3, obstacle.y + 12);
+      dinoCtx.lineTo(obstacle.x - 8, obstacle.y + 15);
+      dinoCtx.lineTo(obstacle.x - 6, obstacle.y + 8);
+      dinoCtx.fill();
+    }
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  // UI SZÖVEG
+  // ═══════════════════════════════════════════════════════════════
+  if (dinoGame.paused) {
+    dinoCtx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    dinoCtx.fillRect(0, 0, w, h);
+    dinoCtx.fillStyle = 'white';
+    dinoCtx.font = 'bold 28px Arial';
+    dinoCtx.textAlign = 'center';
+    dinoCtx.fillText('⏸️ SZÜNET', w / 2, h / 2);
+  }
+}
+
+function checkDinoCollision() {
+  const dino = dinoGame.dino;
+  const dinoLeft = dino.x + 5;
+  const dinoRight = dino.x + dino.width - 5;
+  const dinoTop = dino.y + (dino.ducking ? 20 : 10);
+  const dinoBottom = dino.y + dino.height;
+  
+  for (const obstacle of dinoGame.obstacles) {
+    const obsLeft = obstacle.x;
+    const obsRight = obstacle.x + obstacle.width;
+    const obsTop = obstacle.y;
+    const obsBottom = obstacle.y + obstacle.height;
+    
+    // AABB ütközésdetektor
+    if (dinoRight > obsLeft && dinoLeft < obsRight && dinoBottom > obsTop && dinoTop < obsBottom) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function gameOverDino() {
+  dinoGame.running = false;
+  dinoGameOverActive = true;
+  dinoRunning = false;
+  
+  if (dinoGame.score > dinoGame.highScore) {
+    dinoGame.highScore = dinoGame.score;
+    localStorage.setItem('dinoHighScore', dinoGame.highScore.toString());
+  }
+
+  // Pénz jutalom a pontszám alapján — jó arány
+  const reward = Math.floor(dinoGame.score * 5); // 1 pont = 5 Ft
+  if (reward > 0) {
+    const u = curUser();
+    if (u) {
+      u.balance += reward;
+      persist();
+      updateNav();
+    }
+  }
+
+  updateDinoDisplay();
+
+  // Game Over rajzolás
+  dinoCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  dinoCtx.fillRect(0, 0, dinoCanvas.width, dinoCanvas.height);
+  
+  dinoCtx.fillStyle = 'white';
+  dinoCtx.font = 'bold 36px Arial';
+  dinoCtx.textAlign = 'center';
+  dinoCtx.textBaseline = 'middle';
+  dinoCtx.fillText('💥 GAME OVER', dinoCanvas.width / 2, dinoCanvas.height / 2 - 40);
+  
+  dinoCtx.font = '18px Arial';
+  dinoCtx.fillText(`Pontszám: ${dinoGame.score}`, dinoCanvas.width / 2, dinoCanvas.height / 2 + 10);
+  dinoCtx.fillText(`Rekord: ${dinoGame.highScore}`, dinoCanvas.width / 2, dinoCanvas.height / 2 + 35);
+  
+  if (reward > 0) {
+    dinoCtx.fillStyle = '#FFD700';
+    dinoCtx.font = 'bold 16px Arial';
+    dinoCtx.fillText(`💰 Jutalom: +${reward} Ft`, dinoCanvas.width / 2, dinoCanvas.height / 2 + 60);
+  }
+  
+  dinoCtx.font = '14px Arial';
+  dinoCtx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+  dinoCtx.fillText('SPACE gomb = Újrakezd', dinoCanvas.width / 2, dinoCanvas.height / 2 + 90);
+}
+
+function drawCrashGraph() {
+  if (!crashCtx || !crashRoundActive || !crashGameActive) return;
+
+  const w = crashCanvas.width, h = crashCanvas.height;
+  const now = performance.now();
+  const elapsed = (now - crashStartTime) / 1000;
+
+  crashCurrentMultiplier = Math.pow(1.001, elapsed * 60);
+
+  if (crashCurrentMultiplier >= crashCrashPoint) {
+    crashCurrentMultiplier = crashCrashPoint;
+    endCrashRound();
+    return;
+  }
+
+  crashCtx.fillStyle = '#0a0e1a';
+  crashCtx.fillRect(0, 0, w, h);
+
+  const padding = 40;
+  const graphW = w - 2 * padding;
+  const graphH = h - 2 * padding;
+  const maxMult = Math.max(crashCrashPoint * 1.2, 5);
+
+  // Rács
+  crashCtx.strokeStyle = 'rgba(245,197,24,.1)';
+  crashCtx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (graphH / 5) * i;
+    crashCtx.beginPath();
+    crashCtx.moveTo(padding, y);
+    crashCtx.lineTo(w - padding, y);
+    crashCtx.stroke();
+  }
+
+  // Y tengely feliratok
+  crashCtx.fillStyle = 'rgba(255,255,255,0.4)';
+  crashCtx.font = '11px Inter, sans-serif';
+  crashCtx.textAlign = 'right';
+  for (let i = 0; i <= 5; i++) {
+    const mult = maxMult - (maxMult / 5) * i;
+    const y = padding + (graphH / 5) * i;
+    crashCtx.fillText(mult.toFixed(1) + 'x', padding - 5, y + 4);
+  }
+
+  // Szorzó vonal
+  crashCtx.strokeStyle = '#22c55e';
+  crashCtx.lineWidth = 3;
+  crashCtx.lineCap = 'round';
+  crashCtx.lineJoin = 'round';
+  crashCtx.beginPath();
+
+  const points = [];
+  for (let x = 0; x <= graphW; x += 3) {
+    const t = (x / graphW) * elapsed * 2;
+    const mult = Math.pow(1.001, t * 60);
+    if (mult > maxMult) break;
+    const y = h - padding - (mult / maxMult) * graphH;
+    points.push({ x: padding + x, y });
+  }
+
+  if (points.length > 1) {
+    crashCtx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+      crashCtx.lineTo(points[i].x, points[i].y);
+    }
+    crashCtx.stroke();
+  }
+
+  // Glow effekt a vonalra
+  crashCtx.strokeStyle = 'rgba(34,197,94,0.2)';
+  crashCtx.lineWidth = 8;
+  if (points.length > 1) {
+    crashCtx.beginPath();
+    crashCtx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+      crashCtx.lineTo(points[i].x, points[i].y);
+    }
+    crashCtx.stroke();
+  }
+
+  // Szorzó kijelzése a canvason
+  crashCtx.fillStyle = crashCurrentMultiplier >= 3 ? '#ffd700' : '#22c55e';
+  crashCtx.font = 'bold 32px Inter, sans-serif';
+  crashCtx.textAlign = 'center';
+  crashCtx.textBaseline = 'middle';
+  crashCtx.fillText(crashCurrentMultiplier.toFixed(2) + 'x', w / 2, h / 2);
+
+  // Űrhajó pozíció
+  const progressX = Math.min((elapsed / (elapsed + 1)) * graphW, graphW);
+  const currentY = Math.max(padding + 15, h - padding - (crashCurrentMultiplier / maxMult) * graphH);
+  const currentX = padding + progressX;
+
+  // Glow kör az űrhajó körül
+  crashCtx.save();
+  crashCtx.translate(currentX, currentY);
+  crashCtx.shadowColor = '#ffd700';
+  crashCtx.shadowBlur = 15;
+  crashCtx.fillStyle = 'rgba(255,215,0,0.3)';
+  crashCtx.beginPath();
+  crashCtx.arc(0, 0, 16, 0, Math.PI * 2);
+  crashCtx.fill();
+
+  crashCtx.shadowBlur = 0;
+  crashCtx.font = '20px Arial';
+  crashCtx.textAlign = 'center';
+  crashCtx.textBaseline = 'middle';
+  crashCtx.fillText('🚀', 0, 0);
+  crashCtx.restore();
+}
+
+function endCrashRound() {
+  if (crashAnimationFrameId) {
+    cancelAnimationFrame(crashAnimationFrameId);
+    crashAnimationFrameId = null;
+  }
+
+  crashRoundActive = false;
+  crashGameActive = false;
+
+  // Crash canvas kirajzolása pirossal
+  if (crashCtx && crashCanvas) {
+    const w = crashCanvas.width, h = crashCanvas.height;
+    crashCtx.fillStyle = 'rgba(255,50,50,0.15)';
+    crashCtx.fillRect(0, 0, w, h);
+    crashCtx.fillStyle = '#ff4444';
+    crashCtx.font = 'bold 48px Inter, sans-serif';
+    crashCtx.textAlign = 'center';
+    crashCtx.textBaseline = 'middle';
+    crashCtx.fillText('💥 CRASH! ' + crashCurrentMultiplier.toFixed(2) + 'x', w / 2, h / 2);
+  }
+
+  try { playLose(); } catch (e) {}
+
+  if (crashBetPlaced && !crashCashedOut) {
+    document.getElementById('crash-result').innerHTML =
+      `<div class="result-lose">
+        <div class="result-title">💥 CRASH!</div>
+        <div class="result-amount">Szorzó: ${crashCurrentMultiplier.toFixed(2)}x — Elvesztetted: -${crashBetAmount.toLocaleString('hu-HU')} Ft</div>
+      </div>`;
+  }
+
+  crashHistory.push(crashCurrentMultiplier);
+  if (crashHistory.length > 10) crashHistory.shift();
+  updateCrashHistory();
+
+  setTimeout(() => {
+    resetGameState();
+    drawCrashEmpty();
+  }, 3000);
+}
+
+function resetGameState() {
+  crashBetPlaced = false;
+  crashCashedOut = false;
+  crashRoundActive = false;
+  crashGameActive = false;
+
+  const placeBtn = document.getElementById('crash-place-btn');
+  const cashoutBtn = document.getElementById('crash-cashout-btn');
+  const status = document.getElementById('crash-status');
+
+  if (placeBtn) placeBtn.disabled = false;
+  if (cashoutBtn) cashoutBtn.disabled = true;
+  if (status) status.textContent = 'Készen áll!';
+
+  unlockCrashInputs();
+}
+
+function crashAdjBet(amount) {
+  if (crashGameActive || crashRoundActive) return;
+  playClick();
+  crashBet = Math.max(getMinBet(), crashBet + amount);
+  const betInput = document.getElementById('crash-bet-amount');
+  if (betInput) betInput.value = crashBet;
+}
+
+function crashPlaceBet() {
+  if (crashGameActive || crashRoundActive || crashBetPlaced) return;
+
+  const u = curUser();
+  if (!u || !u.crashOwned) {
+    openCrashBuyModal();
+    return;
+  }
+
+  // ── Tét beolvasása és sanitizálása ──
+  const betInput = document.getElementById('crash-bet-amount');
+  let rawVal = betInput ? betInput.value.replace(/[^0-9]/g, '') : String(getMinBet());
+
+  let parsedBet = parseInt(rawVal) || getMinBet();
+  parsedBet = Math.max(getMinBet(), parsedBet);
+
+  // Input visszaírása a tisztított értékkel
+  if (betInput) betInput.value = parsedBet;
+  crashBet = parsedBet;
+
+  // ── Egyenleg ellenőrzés ──
+  const currentBalance = getBalance();
+
+  if (parsedBet > currentBalance) {
+    const noBalEl = document.getElementById('crash-no-bal');
+    if (noBalEl) {
+      noBalEl.textContent = `Nincs elég egyenleged! (Egyenleg: ${currentBalance.toLocaleString('hu-HU')} Ft)`;
+      noBalEl.style.display = 'block';
+      // 3 másodperc után eltűnik
+      setTimeout(() => { noBalEl.style.display = 'none'; }, 3000);
+    }
+    return;
+  }
+
+  const noBalEl = document.getElementById('crash-no-bal');
+  if (noBalEl) noBalEl.style.display = 'none';
+
+  // ── Tét levonása ──
+  const newBalance = currentBalance - parsedBet;
+  setBalance(newBalance);
+  crashBetAmount = parsedBet;
+  updateCrashBalance();
+
+  playClick();
+  try { dailyTrack('play_crash', 1); } catch (e) {}
+  gameOpenedXp();
+
+  // ── Inputok letiltása játék közben ──
+  lockCrashInputs();
+
+  startNewRound();
+}
+
+function startNewRound() {
+  crashBetPlaced = true;
+  crashCashedOut = false;
+  crashGameActive = true;
+  crashRoundActive = true;
+  crashStartTime = performance.now();
+  crashCurrentMultiplier = 1;
+  crashCrashPoint = generateCrashPoint();
+
+  // Auto cashout beolvasása
+  const autoEl = document.getElementById('crash-auto-cashout');
+  const autoCashoutStr = autoEl ? autoEl.value.trim() : '';
+  const autoParsed = parseFloat(autoCashoutStr);
+  crashAutoCashout = (!isNaN(autoParsed) && autoParsed > 1) ? autoParsed : 0;
+
+  document.getElementById('crash-place-btn').disabled = true;
+  document.getElementById('crash-cashout-btn').disabled = false;
+  document.getElementById('crash-status').textContent = '🚀 Felfelé!';
+  document.getElementById('crash-result').innerHTML = '';
+
+  // Előző animáció megállítása ha volt
+  if (crashAnimationFrameId) {
+    cancelAnimationFrame(crashAnimationFrameId);
+    crashAnimationFrameId = null;
+  }
+
+  crashAnimateRound();
+}
+
+function crashCashOut() {
+  if (!crashGameActive || crashCashedOut || !crashRoundActive) return;
+
+  // Animáció leállítása
+  if (crashAnimationFrameId) {
+    cancelAnimationFrame(crashAnimationFrameId);
+    crashAnimationFrameId = null;
+  }
+
+  const winAmount = Math.round(crashBetAmount * crashCurrentMultiplier);
+  const profit = winAmount - crashBetAmount;
+
+  // Nyeremény jóváírása
+  setBalance(getBalance() + winAmount);
+  updateCrashBalance();
+  try { handleBigWin(winAmount); } catch (e) {}
+
+  try { playWin(); } catch (e) {}
+  try { spawnConfetti(25); } catch (e) {}
+  if (profit > 0) {
+    try { gameWonXp(checkWin(profit), profit); } catch (e) {}
+  }
+
+  crashCashedOut = true;
+  crashRoundActive = false;
+  crashGameActive = false;
+
+  crashHistory.push(crashCurrentMultiplier);
+  if (crashHistory.length > 10) crashHistory.shift();
+  updateCrashHistory();
+
+  document.getElementById('crash-result').innerHTML =
+    `<div class="result-win">
+      <div class="result-title">🎉 Kiszálltál!</div>
+      <div class="result-amount">Szorzó: ${crashCurrentMultiplier.toFixed(2)}x — +${winAmount.toLocaleString('hu-HU')} Ft</div>
+    </div>`;
+
+  document.getElementById('crash-status').textContent = 'Sikeres kiszállás!';
+  document.getElementById('crash-cashout-btn').disabled = true;
+
+  setTimeout(() => {
+    resetGameState();
+    drawCrashEmpty();
+  }, 3000);
+}
+
+function crashAnimateRound() {
+  if (!crashRoundActive || !crashGameActive) return;
+
+  // Auto cashout ellenőrzés
+  if (crashAutoCashout > 1 && crashCurrentMultiplier >= crashAutoCashout && !crashCashedOut) {
+    crashCashOut();
+    return;
+  }
+
+  // Szorzó UI frissítés
+  const multDisplay = document.getElementById('crash-mult-display');
+  if (multDisplay) {
+    multDisplay.textContent = crashCurrentMultiplier.toFixed(2) + 'x';
+  }
+
+  drawCrashGraph();
+
+  if (crashRoundActive && crashGameActive) {
+    crashAnimationFrameId = requestAnimationFrame(crashAnimateRound);
+  }
+}
+
+function updateCrashBalance() {
+  crashUserBalance = getBalance();
+  const balDisplay = document.getElementById('crash-bal-display');
+  if (balDisplay) {
+    balDisplay.textContent = crashUserBalance.toLocaleString('hu-HU') + ' Ft';
+  }
+  const betInput = document.getElementById('crash-bet-amount');
+  if (betInput) {
+    betInput.setAttribute('min', getMinBet());
+  }
+}
+
+function updateCrashHistory() {
+  const historyList = document.getElementById('crash-history-list');
+  if (!historyList) return;
+
+  historyList.innerHTML = '';
+
+  for (let i = 0; i < 10; i++) {
+    const div = document.createElement('div');
+    div.className = 'crash-history-item';
+
+    if (i < crashHistory.length) {
+      const val = crashHistory[crashHistory.length - 1 - i];
+      div.textContent = val.toFixed(2) + 'x';
+
+      // Szín az érték alapján
+      if (val >= 10) {
+        div.style.color = '#ffd700';
+        div.style.fontWeight = 'bold';
+      } else if (val >= 5) {
+        div.style.color = '#22c55e';
+      } else if (val >= 2) {
+        div.style.color = '#60a5fa';
+      } else {
+        div.style.color = '#ff4444';
+      }
+    } else {
+      div.textContent = '--';
+      div.style.opacity = '0.3';
+    }
+
+    historyList.appendChild(div);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  initCrash();
+});
 
 // =====================================================
 // KENO
@@ -2854,8 +4351,8 @@ function kenoClear() {
   document.getElementById('keno-result').innerHTML='';
   document.getElementById('keno-play-btn').textContent='🎯 Húzás!';
 }
-function kenoAdj(d) { if (kenoRunning) return; playClick(); kenoBet=Math.max(100,Math.min(50000,getBet('keno-bet')+d)); setBetDisplay('keno-bet',kenoBet); }
-function kenoBetInput(el) { if (kenoRunning) return; kenoBet = Math.max(100, parseInt((el.value||'').replace(/\D/g,''))||100); }
+function kenoAdj(d) { if (kenoRunning) return; playClick(); kenoBet=Math.max(getMinBet(),Math.min(50000,getBet('keno-bet')+d)); setBetDisplay('keno-bet',kenoBet); }
+function kenoBetInput(el) { if (kenoRunning) return; kenoBet = Math.max(getMinBet(), parseInt((el.value||'').replace(/\D/g,''))||getMinBet()); }
 function kenoPlay() {
   if (kenoPhase==='done') {
     kenoPhase = 'pick';
@@ -2942,8 +4439,8 @@ function initSlots() {
     }
   }
 }
-function slotsAdj(d) { if (slotsSpinning) return; playClick(); slotsBet=Math.max(100,Math.min(50000,getBet('slots-bet')+d)); setBetDisplay('slots-bet',slotsBet); }
-function slotsBetInput(el) { if (slotsSpinning) return; slotsBet = Math.max(100, parseInt((el.value||'').replace(/\D/g,''))||100); }
+function slotsAdj(d) { if (slotsSpinning) return; playClick(); slotsBet=Math.max(getMinBet(),Math.min(50000,getBet('slots-bet')+d)); setBetDisplay('slots-bet',slotsBet); }
+function slotsBetInput(el) { if (slotsSpinning) return; slotsBet = Math.max(getMinBet(), parseInt((el.value||'').replace(/\D/g,''))||getMinBet()); }
 function slotSpin() {
   if (slotsSpinning) return;
   slotsBet = getBet('slots-bet');
@@ -3029,9 +4526,9 @@ function makeDeck() {
 
 function rankIsRed(suit) { return suit==='♥' || suit==='♦'; }
 
-function hiloAdj(d) { if (hiloPhase!=='idle') return; playClick(); hiloBet=Math.max(100,Math.min(50000,getBet('hilo-bet')+d)); setBetDisplay('hilo-bet',hiloBet); }
+function hiloAdj(d) { if (hiloPhase!=='idle') return; playClick(); hiloBet=Math.max(getMinBet(),Math.min(50000,getBet('hilo-bet')+d)); setBetDisplay('hilo-bet',hiloBet); }
 
-function hiloBetInput(el) { if (hiloPhase!=='idle') return; hiloBet = Math.max(100, parseInt((el.value||'').replace(/\D/g,''))||100); }
+function hiloBetInput(el) { if (hiloPhase!=='idle') return; hiloBet = Math.max(getMinBet(), parseInt((el.value||'').replace(/\D/g,''))||getMinBet()); }
 
 function hiloReset() {
   hiloPhase = 'idle'; hiloMult = 1; hiloStreak = 0; hiloCurrent = null;
@@ -4265,7 +5762,7 @@ function dailyTrack(evt, amount = 1) {
   ensureDailyQuests();
   amount = Number(amount) || 1;
 
-  const gameEvts = ['spin_slots','play_plinko','play_coin','play_dice','play_blackjack','play_roulette','play_keno','play_hilo','play_poker'];
+  const gameEvts = ['spin_slots','play_plinko','play_coin','play_dice','play_blackjack','play_crash','play_keno','play_hilo','play_poker'];
 
   let changed = false;
 
@@ -4502,6 +5999,13 @@ function showConfirm(title, msg, onYes) {
 }
 function closeModal(id) { const el = document.getElementById(id); if (el) el.classList.add('hidden'); }
 
+// Info modal megjelenítés
+function showInfoModal(title, message) {
+  document.getElementById('info-title').textContent = title;
+  document.getElementById('info-msg').textContent = message;
+  document.getElementById('info-modal').classList.remove('hidden');
+}
+
 // --- BG GRADIENT ---
 function openBgEditor() {
   playClick();
@@ -4564,7 +6068,7 @@ function openBtnDragMode() {
       showConfirm('💸 Nincs elég pénz', 'A gomb-elrendezés 1.000.000 Ft. Az egyenleged: ' + u.balance.toLocaleString('hu-HU') + ' Ft.', () => {});
       return;
     }
-    showConfirm('🐳 Vásárlás megerősítése', '1.000.000 Ft-ot vonunk le, hogy elhúzhasd a Ranglista és Egyenleg gombokat (max. 2). Folytatod?', () => {
+    showConfirm('🐳 Vásárlás megerősítése', '1.000.000 Ft-ot vonunk le, hogy elhúzhass minden felső menü gombot. Folytatod?', () => {
       setBalance(u.balance - 1000000);
       u.btnDragOwned = true;
       persist();
@@ -4578,16 +6082,17 @@ function openBtnDragMode() {
 function enableBtnDragMode() {
   _dragMode = true;
   document.getElementById('drag-mode-banner').style.display = 'block';
-  setupDraggable('balance-btn', 'balance');
-  setupDraggable('nav-lb-btn', 'lb');
+  document.querySelectorAll('#navbar button[id]').forEach(btn => setupDraggable(btn.id));
 }
 function exitBtnDragMode() {
   _dragMode = false;
   document.getElementById('drag-mode-banner').style.display = 'none';
   document.querySelectorAll('.draggable-btn').forEach(el => el.classList.remove('draggable-btn'));
+  applyBtnPositions();
   persist();
+  saveBtnPositionsToCloud();
 }
-function setupDraggable(elId, key) {
+function setupDraggable(elId, key = elId) {
   const el = document.getElementById(elId);
   if (!el) return;
   el.classList.add('draggable-btn');
@@ -4595,6 +6100,10 @@ function setupDraggable(elId, key) {
   if (u && u.btnPositions && u.btnPositions[key]) {
     el.style.left = u.btnPositions[key].x + 'px';
     el.style.top  = u.btnPositions[key].y + 'px';
+  } else {
+    const rect = el.getBoundingClientRect();
+    el.style.left = rect.left + 'px';
+    el.style.top = rect.top + 'px';
   }
   let drag = null;
   const onDown = (e) => {
@@ -4621,6 +6130,7 @@ function setupDraggable(elId, key) {
     if (u) {
       u.btnPositions[key] = { x: parseInt(el.style.left)||0, y: parseInt(el.style.top)||0 };
       persist();
+      saveBtnPositionsToCloud();
     }
   };
   el._dragHandlers = { onDown, onMove, onUp };
@@ -4632,9 +6142,19 @@ function setupDraggable(elId, key) {
   document.addEventListener('touchend', onUp);
 }
 function applyBtnPositions() {
-  const u = curUser(); if (!u || !u.btnPositions) return;
-  for (const key of ['balance', 'lb']) {
-    const elId = key === 'balance' ? 'balance-btn' : 'nav-lb-btn';
+  const u = curUser();
+  const legacyMap = { balance: 'balance-btn', lb: 'nav-lb-btn' };
+  document.querySelectorAll('#navbar button[id]').forEach(el => {
+    el.style.position = '';
+    el.style.left = '';
+    el.style.top = '';
+    el.style.zIndex = '';
+  });
+
+  if (!u || !u.btnPositions) return;
+  for (const key in u.btnPositions) {
+    if (!Object.prototype.hasOwnProperty.call(u.btnPositions, key)) continue;
+    const elId = legacyMap[key] || key;
     const el = document.getElementById(elId);
     const pos = u.btnPositions[key];
     if (el && pos) {
@@ -4803,11 +6323,6 @@ document.addEventListener('keydown', function(e) {
     // Poker
     if (document.getElementById('poker-match').style.display !== 'none') {
       closePoker();
-      return;
-    }
-    // Roulette
-    if (document.getElementById('roulette-game').style.display !== 'none') {
-      closeRoulette();
       return;
     }
     // Keno
