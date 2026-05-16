@@ -2439,7 +2439,7 @@ function closeBalanceModal() { document.getElementById('balance-modal').classLis
 function redeemCode() {
   const code = (document.getElementById('code-input').value || '').trim().toLowerCase();
   const res = document.getElementById('code-result');
-  const CODES = { nyitas: 10000, money: 5000, forint: 10000, ride:5000};
+  const CODES = { nyitas: 10000, money: 5000, forint: 10000, crash:5000};
   const u = curUser();
   if (!u) return;
   if (!CODES[code]) { res.textContent = 'Érvénytelen kód!'; res.className = 'code-result err'; res.style.display = 'block'; return; }
