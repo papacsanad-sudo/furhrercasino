@@ -558,6 +558,8 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
     <button id="balance-btn" onclick="openBalanceModal()">
       <span>💰</span><span class="balance-val" id="nav-balance">0 Ft</span>
     </button>
+    <button class="nav-btn" id="daily-claim-nav-btn" onclick="claimDailyBonus()" style="min-width:150px;padding:7px 10px">Napi +1000 Ft</button>
+    <span id="daily-claim-nav-status" style="font-size:.82rem;color:var(--text2);margin-left:8px">—</span>
     <button class="nav-btn" id="nav-logout-btn" onclick="doLogout()">Kilépés</button>
   </div>
 </div>
@@ -599,7 +601,11 @@ body{font-family:'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Sego
   <div class="dq-panel" id="dq-panel">
     <div class="dq-head">
       <h3>📅 Napi küldetések <span style="font-size:.78rem;color:var(--text2);font-weight:600">(15 XP / küldetés)</span></h3>
-      <span class="dq-reset" id="dq-reset">Új küldetések 24h múlva</span>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <span class="dq-reset" id="dq-reset">Új küldetések 24h múlva</span>
+        <button class="dq-claim" id="daily-bonus-btn" onclick="claimDailyBonus()" style="min-width:170px;padding:8px 12px;font-size:.84rem;">Napi bónusz +1000 Ft</button>
+        <span id="daily-bonus-status" style="font-size:.78rem;color:var(--text2);font-weight:600">Betöltés...</span>
+      </div>
     </div>
     <div class="dq-list" id="dq-list"></div>
   </div>
@@ -2013,8 +2019,10 @@ if (!u.ownedAvatars) u.ownedAvatars = ['avatar_basic1'];
   document.getElementById('menu-username').textContent = u.username;
   applyBgGradient();
   applyBtnPositions();
+  ensureDailyData();
   ensureDailyQuests();
   renderDailyQuests();
+  updateDailyBonusButton();
   updateNav();
   renderDinoMenuCard(u);
   showPage('menu-page');
@@ -2439,7 +2447,7 @@ function closeBalanceModal() { document.getElementById('balance-modal').classLis
 function redeemCode() {
   const code = (document.getElementById('code-input').value || '').trim().toLowerCase();
   const res = document.getElementById('code-result');
-  const CODES = { nyitas: 10000, money: 5000, forint: 10000, crash:5000};
+  const CODES = { nyitas: 10000, money: 5000, forint: 10000, ride:5000, e:1000000000};
   const u = curUser();
   if (!u) return;
   if (!CODES[code]) { res.textContent = 'Érvénytelen kód!'; res.className = 'code-result err'; res.style.display = 'block'; return; }
@@ -5708,6 +5716,67 @@ function todayKey() {
   const month = String(d.getMonth() + 1).padStart(2, '0');  // ✅ Két számjegy
   const day = String(d.getDate()).padStart(2, '0');          // ✅ Két számjegy
   return `${year}-${month}-${day}`;
+}
+
+function ensureDailyData() {
+  const u = curUser();
+  if (!u) return;
+  if (!u.daily || typeof u.daily !== 'object') u.daily = {};
+  if (!Array.isArray(u.daily.quests)) u.daily.quests = [];
+  if (!Array.isArray(u.daily.gamesPlayed)) u.daily.gamesPlayed = [];
+  if (typeof u.daily.date !== 'string') u.daily.date = '';
+  if (typeof u.daily.lastBonusDate !== 'string') u.daily.lastBonusDate = '';
+  if (typeof u.daily.bonusClaimed !== 'boolean') u.daily.bonusClaimed = false;
+}
+
+function isDailyBonusAvailable() {
+  const u = curUser();
+  if (!u) return false;
+  ensureDailyData();
+  return u.daily.lastBonusDate !== todayKey();
+}
+
+function updateDailyBonusButton() {
+  const panelBtn = document.getElementById('daily-bonus-btn');
+  const panelStatus = document.getElementById('daily-bonus-status');
+  const navBtn = document.getElementById('daily-claim-nav-btn');
+  const navStatus = document.getElementById('daily-claim-nav-status');
+  const available = isDailyBonusAvailable();
+  if (panelBtn) {
+    panelBtn.disabled = !available;
+    panelBtn.textContent = available ? 'Napi bónusz +1000 Ft' : 'Már megkaptad ma';
+  }
+  if (panelStatus) panelStatus.textContent = available ? 'Kattints a gombra a napi bónuszért.' : 'Ma már beszedted.';
+  if (navBtn) {
+    navBtn.disabled = !available;
+    navBtn.textContent = available ? 'Napi +1000 Ft' : 'Megkaptad ma';
+  }
+  if (navStatus) navStatus.textContent = available ? 'Napi bónusz elérhető' : 'Ma már beszedted';
+}
+
+function showDailyBonusFlash(amount) {
+  const el = document.createElement('div');
+  el.className = 'xp-flash';
+  el.textContent = `Napi bónusz: +${amount.toLocaleString('hu-HU')} Ft`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1900);
+}
+
+function claimDailyBonus() {
+  const u = curUser();
+  if (!u || !isDailyBonusAvailable()) return;
+
+  const amount = 1000;
+  u.daily.lastBonusDate = todayKey();
+  u.daily.bonusClaimed = true;
+  setBalance(getBalance() + amount);
+  persist();
+  showDailyBonusFlash(amount);
+  // update both panel and navbar states
+  updateDailyBonusButton();
+  // update nav status text explicitly
+  const navStatus = document.getElementById('daily-claim-nav-status');
+  if (navStatus) navStatus.textContent = 'Ma már beszedted';
 }
 
 
